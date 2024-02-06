@@ -1,4 +1,4 @@
-package tiw.is.vols.livraison.dao;
+package tiw.is.vols.livraison;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -11,6 +11,7 @@ import tiw.is.vols.livraison.model.Baggage;
 import tiw.is.vols.livraison.model.Company;
 import tiw.is.vols.livraison.model.Flight;
 
+import java.util.Arrays;
 import java.util.stream.IntStream;
 
 public abstract class DataAccessObjectTest {
@@ -38,16 +39,6 @@ public abstract class DataAccessObjectTest {
 
     @AfterAll
     public static void tearDownClass() {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-
-        em.createQuery("DELETE FROM Baggage").executeUpdate();
-        em.createQuery("DELETE FROM Flight").executeUpdate();
-        em.createQuery("DELETE FROM Company").executeUpdate();
-
-        em.getTransaction().commit();
-        em.close();
-
         emf.close();
     }
 
@@ -91,6 +82,11 @@ public abstract class DataAccessObjectTest {
                 baggages[i].recuperer();
             }
         }
+        for (int i = 0; i < flights.length; i++) {
+            if (i % 3 == 0) {
+                flights[i].fermerLivraison();
+            }
+        }
     }
 
     protected void persistData() {
@@ -115,29 +111,17 @@ public abstract class DataAccessObjectTest {
     }
 
     protected void destroyData() {
+        EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        for (Baggage b : baggages) {
-            if (em.contains(b)) {
-                em.remove(b);
-            }
-        }
+
+        em.createQuery("DELETE FROM Baggage").executeUpdate();
+        em.createQuery("DELETE FROM Flight").executeUpdate();
+        em.createQuery("DELETE FROM Company").executeUpdate();
+
         em.getTransaction().commit();
-        em.getTransaction().begin();
-        for (Flight v : flights) {
-            if (em.contains(v)) {
-                em.remove(v);
-            }
-        }
-        em.getTransaction().commit();
-        em.getTransaction().begin();
-        for (Company c : companies) {
-            if (em.contains(c)) {
-                em.remove(c);
-            }
-        }
-        em.getTransaction().commit();
+        em.close();
+        baggages = null;
         flights = null;
         companies = null;
     }
-
 }

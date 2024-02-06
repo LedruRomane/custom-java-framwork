@@ -11,8 +11,4 @@ public class JsonFormatter<T> {
     public String serializeObject(Object object) throws JsonProcessingException {
         return mapper.writeValueAsString(object);
     }
-
-    public T deserializeJson(String jsonString, Class<T> myclass) throws IOException {
-        return mapper.readValue(jsonString, myclass);
-    }
 }

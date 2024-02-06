@@ -3,7 +3,7 @@ package tiw.is.vols.livraison.controller.resource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
-import tiw.is.vols.livraison.dao.DataAccessObjectTest;
+import tiw.is.vols.livraison.DataAccessObjectTest;
 import tiw.is.vols.livraison.dto.FlightDTO;
 import tiw.is.vols.livraison.exception.ResourceNotFoundException;
 import tiw.is.vols.livraison.command.resource.flight.CreateOrUpdateFlightCommand;

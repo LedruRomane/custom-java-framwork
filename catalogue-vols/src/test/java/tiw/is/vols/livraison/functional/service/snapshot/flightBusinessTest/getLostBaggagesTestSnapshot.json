@@ -1,0 +1,14 @@
+[
+  {
+    "flightId": "v-getLostBaggages()-2-0",
+    "numero": 2,
+    "weight": 40.0,
+    "passenger": "p-getLostBaggages()-1"
+  },
+  {
+    "flightId": "v-getLostBaggages()-2-0",
+    "numero": 4,
+    "weight": 40.0,
+    "passenger": "p-getLostBaggages()-3"
+  }
+]
