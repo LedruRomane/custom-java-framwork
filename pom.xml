@@ -26,6 +26,7 @@
     </properties>
 
     <modules>
+        <module>base-processor</module>
         <module>catalogue-vols</module>
         <module>integration</module>
         <module>server</module>
