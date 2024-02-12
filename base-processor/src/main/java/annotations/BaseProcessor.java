@@ -30,13 +30,13 @@ public class BaseProcessor extends AbstractProcessor {
         this.startMethod = MethodSpec
                 .methodBuilder("start")
                 .addModifiers(Modifier.PUBLIC)
-                .addCode("logger.info(\"Composant \" + this.toString() + \" démarré.\");")
+                .addCode("logger.info(\"Composant \" + this.getClass().getName() + \" démarré.\");")
                 .build();
 
         this.stopMethod = MethodSpec
                 .methodBuilder("stop")
                 .addModifiers(Modifier.PUBLIC)
-                .addCode("logger.info(\"Composant \" + this.toString() + \" arrêté.\");")
+                .addCode("logger.info(\"Composant \" + this.getClass().getName() + \" arrêté.\");")
                 .build();
 
         this.loggerField = FieldSpec
@@ -57,16 +57,11 @@ public class BaseProcessor extends AbstractProcessor {
                 TypeSpec.Builder subComponentBuilder = TypeSpec
                         .classBuilder(ClassName.bestGuess(element.toString() + "_Component"))
                         .superclass(element.asType())
+                        .addSuperinterface(ClassName.get("org.picocontainer", "Startable"))
                         .addField(this.loggerField)
                         .addModifiers(Modifier.PUBLIC)
                         .addMethod(this.startMethod)
-                        .addMethod(this.stopMethod)
-                        .addField(String.class, "name", Modifier.PRIVATE) // Ajout d'un champ 'name'
-                        .addMethod(MethodSpec.methodBuilder("getName") // Ajout d'une méthode 'getName()'
-                                .addModifiers(Modifier.PUBLIC)
-                                .returns(String.class)
-                                .addStatement("return this.name")
-                                .build());
+                        .addMethod(this.stopMethod);
 
                 // Add constructor(s) (wink wink)
                 for (Element enclosedElement : parentClass.getEnclosedElements()) {
