@@ -1,7 +1,7 @@
 package annotations;
 
 public enum COMPONENT_TYPE {
-    CONTROLLER("controller", 1),
+    HANDLER("handler", 1),
     DATA("data", 2),
     PERSISTENCE("persistence", 3);
 

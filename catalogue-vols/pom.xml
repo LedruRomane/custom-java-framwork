@@ -109,6 +109,9 @@
             <annotationProcessor>
               annotations.BaseProcessor
             </annotationProcessor>
+            <annotationProcessor>
+              annotations.HandlerProcessor
+            </annotationProcessor>
           </annotationProcessors>
         </configuration>
       </plugin>
