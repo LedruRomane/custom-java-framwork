@@ -19,10 +19,6 @@ import java.util.Map;
 
 public class ComponentLoader {
 
-    //todo: systeme de pass (pass Interface dans serveur).
-    // 1 implem conrete pass dédié pour charger les types de services
-    // 1 pour charger spécifiquement le handlerLocator.
-    // prends un tableau de pass
     private ComponentLoader() {}
 
     /**
@@ -30,42 +26,12 @@ public class ComponentLoader {
      * Register components in container.
      * Charge les composants déclarés dans le fichier de config en
      * fonction de leur forme dans le container de l'app.
-     * @param component Un jsonObject issu d'un array de appConfiguration.json
+     * @param component Un jsonObject issu d'un array de serverRootConfiguration.json
      * @param picoContainer gestionnaire.
      */
     public static void load(JsonObject component, MutablePicoContainer picoContainer) {
-        String className = component.getString("class-name");
-
         try {
-            Class<?> clazz = Class.forName(className);
-
-            if (component.containsKey("factory-type") && component.containsKey("factory-method")) {
-
-                Class<?> factoryClass = Class.forName(component.getString("factory-type"));
-                Object factoryInstance = picoContainer.getComponent(Class.forName(component.getString("factory-type")));
-
-                Method method = factoryClass.getMethod(component.getString("factory-method"));
-                Object instance = method.invoke(factoryInstance);
-
-                picoContainer.addComponent(instance);
-
-                return;
-            }
-
-            if (component.containsKey("params")) {
-                JsonArray params = component.getJsonArray("params");
-                Object[] constructorArgs = new Object[params.size()];
-
-                for (int i = 0; i < params.size(); i++) {
-                    JsonObject param = params.getJsonObject(i);
-                    constructorArgs[i] = param.getString("value");
-                }
-
-                picoContainer.addComponent(clazz, clazz.getConstructor(String.class, String.class, String.class, String.class).newInstance(constructorArgs));
-
-                return;
-            }
-
+            // If any Handlers
             if (component.containsKey("type") && component.get("type").toString().equals("\"handler-locator\"")) {
                 // Instantiate the locator:
                 Map<Class, ICommandHandler<Object, ICommand>> handlerLocator = new HashMap<>();
@@ -80,6 +46,38 @@ public class ComponentLoader {
                     handlerLocator.put(getCommandFromHandler(handlerClass), picoContainer.getComponent(handlerClass));
                 }
                 picoContainer.addComponent(handlerLocator);
+
+                return;
+            }
+
+            String className = component.getString("class-name");
+            Class<?> clazz = Class.forName(className);
+
+            // If any Persistence manager's factory
+            if (component.containsKey("factory-type") && component.containsKey("factory-method")) {
+
+                Class<?> factoryClass = Class.forName(component.getString("factory-type"));
+                Object factoryInstance = picoContainer.getComponent(Class.forName(component.getString("factory-type")));
+
+                Method method = factoryClass.getMethod(component.getString("factory-method"));
+                Object instance = method.invoke(factoryInstance);
+
+                picoContainer.addComponent(instance);
+
+                return;
+            }
+
+            // If any Persistence manager with params
+            if (component.containsKey("params")) {
+                JsonArray params = component.getJsonArray("params");
+                Object[] constructorArgs = new Object[params.size()];
+
+                for (int i = 0; i < params.size(); i++) {
+                    JsonObject param = params.getJsonObject(i);
+                    constructorArgs[i] = param.getString("value");
+                }
+
+                picoContainer.addComponent(clazz, clazz.getConstructor(String.class, String.class, String.class, String.class).newInstance(constructorArgs));
 
                 return;
             }
@@ -134,6 +132,13 @@ public class ComponentLoader {
      * @return ParameterizedType of CommandHandler class.
      */
     static ParameterizedType getHandlerInterface(Class<?> myClass) {
+        if(myClass.getSuperclass() != null) {
+            ParameterizedType handlerInterface = getHandlerInterface(myClass.getSuperclass());
+            if (handlerInterface != null) {
+                return handlerInterface;
+            }
+        }
+
         Type[] interfaces =  myClass.getGenericInterfaces();
         for (Type type : interfaces) {
             if (type instanceof ParameterizedType && ((ParameterizedType) type).getRawType().getTypeName().equals(ICommandHandler.class.getTypeName())) {

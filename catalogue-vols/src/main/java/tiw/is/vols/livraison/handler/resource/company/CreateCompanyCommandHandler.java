@@ -1,5 +1,6 @@
 package tiw.is.vols.livraison.handler.resource.company;
 
+import annotations.Handler;
 import tiw.is.vols.livraison.dao.CompanyDao;
 import tiw.is.vols.livraison.exception.ResourceAlreadyExistsException;
 import tiw.is.vols.livraison.command.resource.company.CreateCompanyCommand;
@@ -11,6 +12,7 @@ import tiw.is.vols.livraison.model.Company;
  * We inject the controller that provide the operations for the creation.
  * Should implement the HandlerInterface to ensure a strong typing check.
  */
+@Handler
 public class CreateCompanyCommandHandler implements ICommandHandler<Company, CreateCompanyCommand> {
 
     private final CompanyDao dao;

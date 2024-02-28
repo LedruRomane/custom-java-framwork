@@ -1,10 +1,12 @@
 package tiw.is.vols.livraison.handler.resource.flight;
 
+import annotations.Handler;
 import tiw.is.vols.livraison.dao.FlightDao;
 import tiw.is.vols.livraison.exception.ResourceNotFoundException;
 import tiw.is.vols.livraison.command.resource.flight.DeleteFlightCommand;
 import tiw.is.server.commandBus.ICommandHandler;
 
+@Handler
 public class DeleteFlightCommandHandler implements ICommandHandler<Boolean, DeleteFlightCommand> {
     private final FlightDao dao;
 

@@ -9,6 +9,13 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
+// annotate this way for resolve the conflict between Persistence import (jarkata.persistence.Persistence) and the custom annotation.
+@annotations.Persistence(
+        dbhost = "localhost",
+        dbname = "catalogue-db",
+        dbuser = "catalogue",
+        dbpassword = "catalogue-mdp"
+)
 public class PersistenceManager implements Startable {
     private String dbHost;
     private String dbName;

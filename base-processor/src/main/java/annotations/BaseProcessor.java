@@ -8,6 +8,12 @@ import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 @SupportedAnnotationTypes("annotations.Component")
@@ -21,6 +27,13 @@ public class BaseProcessor extends AbstractProcessor {
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
+
+        try {
+            ProcessorHelper.deleteAppConfigurationFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         this.startMethod = MethodSpec
                 .methodBuilder("start")
                 .addModifiers(Modifier.PUBLIC)
@@ -40,6 +53,7 @@ public class BaseProcessor extends AbstractProcessor {
                 .build();
     }
 
+    @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         for (TypeElement annotation : annotations) {
             for (Element element : roundEnv.getElementsAnnotatedWith(annotation)) {
@@ -55,16 +69,26 @@ public class BaseProcessor extends AbstractProcessor {
                         .addMethod(this.startMethod)
                         .addMethod(this.stopMethod);
 
-                ProcessorHelper.generateContructor(parentClass, subComponentBuilder);
+                ProcessorHelper.generateConstructor(parentClass, subComponentBuilder);
 
                 // Final build with all methods and constructors.
                 TypeSpec subComponent = subComponentBuilder.build();
 
-
+                // Save & generate file in target
                 ProcessorHelper.saveFile(element, subComponent, this.processingEnv);
+
+                // get annotation infos if there are any
+                Map<String, Object> annotationInfos = new HashMap<>();
+                for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
+                    for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotationMirror.getElementValues().entrySet()) {
+                        annotationInfos.put(entry.getKey().getSimpleName().toString(), entry.getValue().getValue());
+                    }
+                }
+
+                // Add new line to the appConfiguration.json file
+                ProcessorHelper.addNewLineToAppConfiguration(element.toString(), annotationInfos);
             }
         }
         return true;
     }
-
 }

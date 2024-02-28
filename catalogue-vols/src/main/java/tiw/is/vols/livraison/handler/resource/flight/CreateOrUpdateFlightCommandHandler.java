@@ -1,5 +1,6 @@
 package tiw.is.vols.livraison.handler.resource.flight;
 
+import annotations.Handler;
 import tiw.is.vols.livraison.dao.CompanyDao;
 import tiw.is.vols.livraison.dao.FlightDao;
 import tiw.is.vols.livraison.dto.FlightDTO;
@@ -11,6 +12,7 @@ import tiw.is.vols.livraison.model.Flight;
 
 import java.util.Optional;
 
+@Handler
 public class CreateOrUpdateFlightCommandHandler implements ICommandHandler<FlightDTO, CreateOrUpdateFlightCommand> {
 
     private final FlightDao dao;

@@ -110,7 +110,16 @@
               annotations.BaseProcessor
             </annotationProcessor>
             <annotationProcessor>
+              annotations.PersistenceProcessor
+            </annotationProcessor>
+            <annotationProcessor>
+              annotations.DataProcessor
+            </annotationProcessor>
+            <annotationProcessor>
               annotations.HandlerProcessor
+            </annotationProcessor>
+            <annotationProcessor>
+              annotations.DispatcherProcessor
             </annotationProcessor>
           </annotationProcessors>
         </configuration>

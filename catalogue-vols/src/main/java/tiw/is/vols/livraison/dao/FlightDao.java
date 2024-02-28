@@ -2,6 +2,7 @@ package tiw.is.vols.livraison.dao;
 
 import annotations.COMPONENT_TYPE;
 import annotations.Component;
+import annotations.Data;
 import jakarta.persistence.EntityManager;
 import tiw.is.vols.livraison.model.Baggage;
 import tiw.is.vols.livraison.model.Flight;
@@ -11,7 +12,7 @@ import java.util.Collection;
 /**
  * Data Access Object for Flight Model.
  */
-@Component(type = COMPONENT_TYPE.DATA)
+@Data
 public class FlightDao implements IDataAccessObject<Flight> {
 
     private final EntityManager em;

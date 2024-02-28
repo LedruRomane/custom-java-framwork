@@ -1,10 +1,10 @@
 package tiw.is.vols.livraison.handler.service.flight;
 
 import annotations.Handler;
+import tiw.is.server.commandBus.ICommandHandler;
+import tiw.is.vols.livraison.command.service.flight.CloseShipmentCommand;
 import tiw.is.vols.livraison.dao.FlightDao;
 import tiw.is.vols.livraison.exception.ResourceNotFoundException;
-import tiw.is.vols.livraison.command.service.flight.CloseShipmentCommand;
-import tiw.is.server.commandBus.ICommandHandler;
 import tiw.is.vols.livraison.model.Flight;
 
 import java.util.Optional;

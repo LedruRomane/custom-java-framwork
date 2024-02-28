@@ -1,5 +1,6 @@
 package tiw.is.vols.livraison.handler.resource.baggage;
 
+import annotations.Handler;
 import tiw.is.vols.livraison.dao.BaggageDao;
 import tiw.is.vols.livraison.dto.BaggageDTO;
 import tiw.is.vols.livraison.exception.ResourceNotFoundException;
@@ -8,6 +9,7 @@ import tiw.is.server.commandBus.ICommandHandler;
 
 import java.util.Collection;
 
+@Handler
 public class GetBaggagesCommandHandler implements ICommandHandler<Collection<BaggageDTO>, GetBaggagesCommand> {
     private final BaggageDao dao;
 

@@ -1,10 +1,12 @@
 package tiw.is.vols.livraison.handler.resource.baggage;
 
+import annotations.Handler;
 import tiw.is.vols.livraison.dao.BaggageDao;
 import tiw.is.vols.livraison.exception.ResourceNotFoundException;
 import tiw.is.vols.livraison.command.resource.baggage.DeleteBaggageCommand;
 import tiw.is.server.commandBus.ICommandHandler;
 
+@Handler
 public class DeleteBaggageCommandHandler implements ICommandHandler<Boolean, DeleteBaggageCommand> {
     private final BaggageDao dao;
 

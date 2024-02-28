@@ -1,6 +1,6 @@
 package tiw.is.vols.livraison.dao;
 
-import annotations.Component;
+import annotations.Data;
 import jakarta.persistence.EntityManager;
 import tiw.is.vols.livraison.db.BaggageKey;
 import tiw.is.vols.livraison.model.Baggage;
@@ -11,7 +11,7 @@ import java.util.Collection;
 /**
  * Data Access Object for Baggage Model.
  */
-@Component
+@Data
 public class BaggageDao implements IDataAccessObject<Baggage> {
     private final EntityManager em;
     private final FlightDao flightDao;

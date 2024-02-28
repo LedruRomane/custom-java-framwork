@@ -1,5 +1,6 @@
 package tiw.is.vols.livraison.handler.service.flight;
 
+import annotations.Handler;
 import tiw.is.vols.livraison.dao.BaggageDao;
 import tiw.is.vols.livraison.dao.FlightDao;
 import tiw.is.vols.livraison.dto.BaggageDTO;
@@ -11,6 +12,7 @@ import tiw.is.vols.livraison.model.Flight;
 import java.util.Collection;
 import java.util.Optional;
 
+@Handler
 public class GetUnclaimedBaggagesCommandHandler implements ICommandHandler<Collection<BaggageDTO>, GetUnclaimedBaggagesCommand> {
 
     private final FlightDao dao;

@@ -1,10 +1,12 @@
 package tiw.is.vols.livraison.handler.resource.company;
 
+import annotations.Handler;
 import tiw.is.vols.livraison.dao.CompanyDao;
 import tiw.is.vols.livraison.exception.ResourceNotFoundException;
 import tiw.is.vols.livraison.command.resource.company.DeleteCompanyCommand;
 import tiw.is.server.commandBus.ICommandHandler;
 
+@Handler
 public class DeleteCompanyCommandHandler implements ICommandHandler<Boolean, DeleteCompanyCommand> {
     private final CompanyDao dao;
 
