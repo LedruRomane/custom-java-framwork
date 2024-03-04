@@ -1,4 +1,4 @@
-package annotations;
+package annotations.processors;
 
 import com.squareup.javapoet.*;
 import org.slf4j.Logger;
@@ -7,11 +7,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.*;
-import javax.lang.model.type.TypeMirror;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;

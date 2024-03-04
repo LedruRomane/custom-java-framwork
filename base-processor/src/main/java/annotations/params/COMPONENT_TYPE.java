@@ -1,11 +1,13 @@
-package annotations;
+package annotations.params;
 
 public enum COMPONENT_TYPE {
     HANDLER("handler", 1),
     DATA("data", 2),
     PERSISTENCE("persistence", 3),
 
-    DISPATCHER("dispatcher", 4);
+    DISPATCHER("dispatcher", 4),
+
+    SERVLET("servlet", 5);
 
     private int value = -1;
     private String name;

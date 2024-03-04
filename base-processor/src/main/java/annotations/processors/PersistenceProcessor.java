@@ -1,6 +1,8 @@
-package annotations;
+package annotations.processors;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import annotations.params.COMPONENT_TYPE;
+import annotations.Component;
+import annotations.Persistence;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeSpec;
@@ -13,8 +15,6 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
-import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.util.Set;
 
 @SupportedAnnotationTypes("annotations.Persistence")

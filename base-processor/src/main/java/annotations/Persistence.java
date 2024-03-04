@@ -2,14 +2,10 @@ package annotations;
 
 import java.lang.annotation.*;
 
-// S'applique aux classes, interfaces et enums
 @Target(ElementType.TYPE)
 
-// Sera traitée par un annotation processor à l'exécution
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.SOURCE)
 
-// S'applique aussi aux sous-classes de celles annotées
-//@Inherited
 
 /**
  * Annotation qui permettra de définir déclarativement les composants du framework

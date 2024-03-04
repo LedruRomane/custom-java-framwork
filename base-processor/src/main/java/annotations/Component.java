@@ -1,10 +1,11 @@
 package annotations;
 
+import annotations.params.COMPONENT_TYPE;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import java.util.Map;
 
 // S'applique aux classes, interfaces et enums
 @Target(ElementType.TYPE)
@@ -20,5 +21,4 @@ import java.util.Map;
  */
 public @interface Component {
     COMPONENT_TYPE type() default COMPONENT_TYPE.DATA;
-    String[] properties() default {};
 }

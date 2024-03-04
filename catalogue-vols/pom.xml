@@ -107,20 +107,23 @@
           <generatedSourcesDirectory>${project.build.directory}/generated-sources/</generatedSourcesDirectory>
           <annotationProcessors>
             <annotationProcessor>
-              annotations.BaseProcessor
+              annotations.processors.BaseProcessor
             </annotationProcessor>
             <annotationProcessor>
-              annotations.PersistenceProcessor
+              annotations.processors.PersistenceProcessor
             </annotationProcessor>
             <annotationProcessor>
-              annotations.DataProcessor
+              annotations.processors.DataProcessor
             </annotationProcessor>
             <annotationProcessor>
-              annotations.HandlerProcessor
+              annotations.processors.HandlerProcessor
             </annotationProcessor>
             <annotationProcessor>
-              annotations.DispatcherProcessor
+              annotations.processors.DispatcherProcessor
             </annotationProcessor>
+            <!--<annotationProcessor>
+              annotations.processors.ServletProcessor
+            </annotationProcessor>-->
           </annotationProcessors>
         </configuration>
       </plugin>

@@ -16,8 +16,10 @@ import tiw.is.server.service.IDispatcher;
 import tiw.is.server.utils.FixturesManager;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,18 +35,14 @@ public class ServeurImpl implements Serveur {
      * Constructor Server, implement container and provide services & components.
      */
     public ServeurImpl(Path pathConfigurationFile) throws IOException {
-        String app = "application-config";
-        JsonObject configJson;
 
         this.picoContainer = new PicoBuilder(new ConstructorInjection())
                 .withCaching()
                 .withLifecycle(new StartableLifecycleStrategy(new NullComponentMonitor()))
                 .build();
 
-        URL url = ServeurImpl.class.getResource("/serverRootConfiguration.json");
-        Path resPath = Paths.get(url.getPath());
-
-        String serverContent = new String(Files.readAllBytes(resPath));
+        InputStream serverStream = ServeurImpl.class.getResourceAsStream("/serverRootConfiguration.json");
+        String serverContent = new String(serverStream.readAllBytes(), StandardCharsets.UTF_8);
         String configContent = new String(Files.readAllBytes(pathConfigurationFile));
 
         loadFromFile(configContent);

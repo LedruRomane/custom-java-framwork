@@ -1,4 +1,4 @@
-package annotations;
+package annotations.processors;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.databind.JsonNode;

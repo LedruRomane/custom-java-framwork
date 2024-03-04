@@ -14,7 +14,6 @@ public class ServeurManager extends DataAccessObjectTest {
 
     @BeforeAll
     public static void setupServer() throws IOException {
-        //get serverRootConfiguration.json from project target folder
         serveur = new ServeurImpl(Paths.get("src/main/resources/appConfiguration.json"));
     }
 }

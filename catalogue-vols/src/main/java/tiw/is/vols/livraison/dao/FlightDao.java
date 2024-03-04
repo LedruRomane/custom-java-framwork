@@ -1,7 +1,5 @@
 package tiw.is.vols.livraison.dao;
 
-import annotations.COMPONENT_TYPE;
-import annotations.Component;
 import annotations.Data;
 import jakarta.persistence.EntityManager;
 import tiw.is.vols.livraison.model.Baggage;

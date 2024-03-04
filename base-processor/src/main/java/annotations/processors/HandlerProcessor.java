@@ -1,8 +1,7 @@
-package annotations;
+package annotations.processors;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import annotations.params.COMPONENT_TYPE;
+import annotations.Component;
 import com.squareup.javapoet.*;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -11,9 +10,6 @@ import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.*;
-import javax.tools.JavaFileObject;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Set;
 
 @SupportedAnnotationTypes("annotations.Handler")
