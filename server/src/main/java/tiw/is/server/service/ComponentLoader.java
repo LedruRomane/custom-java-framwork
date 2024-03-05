@@ -3,19 +3,18 @@ package tiw.is.server.service;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
+import jakarta.servlet.http.HttpServlet;
 import org.picocontainer.MutablePicoContainer;
 import tiw.is.server.commandBus.ICommand;
 import tiw.is.server.commandBus.ICommandHandler;
 import tiw.is.server.commandBus.IMiddleware;
+import tiw.is.server.framework.web.ServletSet;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ComponentLoader {
 
@@ -31,23 +30,44 @@ public class ComponentLoader {
      */
     public static void load(JsonObject component, MutablePicoContainer picoContainer) {
         try {
-            // If any Handlers
-            if (component.containsKey("type") && component.get("type").toString().equals("\"handler-locator\"")) {
-                // Instantiate the locator:
-                Map<Class, ICommandHandler<Object, ICommand>> handlerLocator = new HashMap<>();
-                JsonArray handlers =  component.getJsonArray("arguments");
+            if (component.containsKey("type")) {
+                //handler
+                if (component.get("type").toString().equals("\"handler-locator\"")) {
+                    // Instantiate the locator:
+                    Map<Class, ICommandHandler<Object, ICommand>> handlerLocator = new HashMap<>();
+                    JsonArray handlers =  component.getJsonArray("arguments");
 
-                for (JsonValue handler : handlers) {
-                    String rawHandlerClass = handler.asJsonObject().getString("class-name");
-                    Class<ICommandHandler> handlerClass = (Class<ICommandHandler>) Class.forName(rawHandlerClass);
-                    // Register the handler as component in the container:
-                    picoContainer.addComponent(handlerClass);
-                    // Register the handler component in the locator:
-                    handlerLocator.put(getCommandFromHandler(handlerClass), picoContainer.getComponent(handlerClass));
+                    for (JsonValue handler : handlers) {
+                        String rawHandlerClass = handler.asJsonObject().getString("class-name");
+                        Class<ICommandHandler> handlerClass = (Class<ICommandHandler>) Class.forName(rawHandlerClass);
+                        // Register the handler as component in the container:
+                        picoContainer.addComponent(handlerClass);
+                        // Register the handler component in the locator:
+                        handlerLocator.put(getCommandFromHandler(handlerClass), picoContainer.getComponent(handlerClass));
+                    }
+                    picoContainer.addComponent(handlerLocator);
+
+                    return;
                 }
-                picoContainer.addComponent(handlerLocator);
 
-                return;
+                //servlet
+                if (component.get("type").toString().equals("\"servlet-set\"")) {
+                    picoContainer.addComponent(ServletSet.class);
+
+                    Set<Class<HttpServlet>> servletSet = new HashSet<>();
+                    JsonArray servlets =  component.getJsonArray("arguments");
+
+                    for (JsonValue servlet : servlets) {
+                        String rawServletClass = servlet.asJsonObject().getString("class-name");
+                        Class<HttpServlet> clazz = (Class<HttpServlet>) Class.forName(rawServletClass);
+                        picoContainer.addComponent(clazz);
+
+                        servletSet.add(clazz);
+                    }
+                    picoContainer.addComponent(servletSet);
+
+                    return;
+                }
             }
 
             String className = component.getString("class-name");

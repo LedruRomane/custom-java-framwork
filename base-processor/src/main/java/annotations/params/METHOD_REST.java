@@ -19,6 +19,9 @@ public enum METHOD_REST {
     public int getValue() {
         return value;
     }
+    public String getName() {
+        return name;
+    }
 
     @Override
     public String toString() {

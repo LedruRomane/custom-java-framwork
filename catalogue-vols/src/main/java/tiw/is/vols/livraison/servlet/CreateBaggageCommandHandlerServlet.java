@@ -1,9 +1,5 @@
 package tiw.is.vols.livraison.servlet;
 
-import annotations.Component;
-import annotations.Servlet;
-import annotations.params.COMPONENT_TYPE;
-import annotations.params.METHOD_REST;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -13,21 +9,27 @@ import jakarta.servlet.http.HttpServletResponse;
 import tiw.is.server.commandBus.CommandBus;
 import tiw.is.server.utils.JsonFormatter;
 import tiw.is.vols.livraison.command.resource.baggage.CreateBaggageCommand;
-import tiw.is.vols.livraison.command.resource.baggage.GetBaggageCommand;
 import tiw.is.vols.livraison.command.resource.baggage.GetBaggagesCommand;
 
 import java.io.IOException;
 import java.util.Map;
 
-@Servlet(
-        path = "baggage/create",
-        method = METHOD_REST.POST
+/*@ServletFromHandler(
+        path = "baggage",
+        method = METHOD_REST.POST,
+        params = {"id", "weight", "passenger"}
 )
 @Component(
         type = COMPONENT_TYPE.SERVLET
-)
+)*/
 public class CreateBaggageCommandHandlerServlet extends HttpServlet {
     private final CommandBus commandBus;
+    private final String path = "baggage";
+
+    public String getPath() {
+        return path;
+    }
+
     private static final JsonFormatter<GetBaggagesCommand> formatter = new JsonFormatter<>();
 
     public CreateBaggageCommandHandlerServlet(CommandBus commandBus) {

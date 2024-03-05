@@ -1,9 +1,5 @@
 package tiw.is.vols.livraison.servlet;
 
-import annotations.Component;
-import annotations.Servlet;
-import annotations.params.COMPONENT_TYPE;
-import annotations.params.METHOD_REST;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
@@ -16,18 +12,17 @@ import tiw.is.vols.livraison.command.resource.baggage.GetBaggageCommand;
 import tiw.is.vols.livraison.command.resource.baggage.GetBaggagesCommand;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
-@Servlet(
+/*@ServletFromHandler(
         path = "baggage",
         method = METHOD_REST.GET,
         params = {"id", "num"}
 )
 @Component(
         type = COMPONENT_TYPE.SERVLET
-)
+)*/
 public class GetBaggageCommandHandlerServlet extends HttpServlet {
     private final CommandBus commandBus;
     private static final JsonFormatter<GetBaggagesCommand> formatter = new JsonFormatter<>();
@@ -44,6 +39,8 @@ public class GetBaggageCommandHandlerServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
+        Map<String, Object> map = new HashMap<>();
+        map = getParams(req);
 
         try {
             String baggage = formatter.serializeObject(this.commandBus.handle(

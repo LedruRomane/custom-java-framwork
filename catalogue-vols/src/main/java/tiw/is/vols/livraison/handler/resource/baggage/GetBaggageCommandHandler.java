@@ -1,6 +1,8 @@
 package tiw.is.vols.livraison.handler.resource.baggage;
 
 import annotations.Handler;
+import annotations.ServletFromHandler;
+import annotations.params.METHOD_REST;
 import tiw.is.vols.livraison.dao.BaggageDao;
 import tiw.is.vols.livraison.dto.BaggageDTO;
 import tiw.is.vols.livraison.exception.ResourceNotFoundException;
@@ -11,6 +13,11 @@ import tiw.is.vols.livraison.model.Baggage;
 import java.util.Optional;
 
 @Handler
+@ServletFromHandler(
+        path = "baggage",
+        method = METHOD_REST.GET,
+        params = {"id", "num"}
+)
 public class GetBaggageCommandHandler implements ICommandHandler<BaggageDTO, GetBaggageCommand> {
 
     private final BaggageDao dao;

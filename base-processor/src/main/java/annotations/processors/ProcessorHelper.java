@@ -132,6 +132,9 @@ public class ProcessorHelper {
             case "Persistence":
                 addPersistentComponent(element, mapper, annotationInfos);
                 break;
+            case "ServletFromHandler":
+                addServletComponent(element, mapper, "servlets-components");
+                break;
             default:
                 addClassicComponent(element, mapper, "components");
                 break;
@@ -158,6 +161,35 @@ public class ProcessorHelper {
         }
     }
 
+    public static void addServletComponent(String element, ObjectMapper mapper, String namespace) {
+        try {
+            JsonNode appConfiguration = getOrCreateAppConfiguration();
+            JsonNode appConfig = appConfiguration.get("application-config");
+
+            if (appConfig.has(namespace)) {
+                JsonNode servletsComponents = appConfig.get(namespace);
+                ArrayNode servletsComponentsArray = (ArrayNode) servletsComponents;
+                JsonNode servletsNode = servletsComponentsArray.get(0);
+
+                ((ArrayNode) servletsNode.get("arguments")).add(
+                        mapper.createObjectNode().put("class-name", element + "_Component")
+                );
+            } else {
+                ObjectNode newNode = mapper.createObjectNode();
+                newNode.put("type", "servlet-set");
+                ArrayNode arguments = newNode.putArray("arguments");
+                arguments.add(mapper.createObjectNode().put("class-name", element + "_Component"));
+                ((ObjectNode) appConfiguration.get("application-config")).putArray(namespace).add(newNode);
+            }
+
+            // Write the modified appConfiguration.json file back to the disk
+            mapper.writeValue(new File(path), appConfiguration);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //todo: refactor in one with servlet
     public static void addHandlerComponent(String element, ObjectMapper mapper, String namespace) {
         try {
             JsonNode appConfiguration = getOrCreateAppConfiguration();
@@ -184,7 +216,6 @@ public class ProcessorHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public static void addPersistentComponent(String element, ObjectMapper mapper, Map annotationInfos) {

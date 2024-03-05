@@ -1,6 +1,8 @@
 package tiw.is.vols.livraison.handler.resource.baggage;
 
 import annotations.Handler;
+import annotations.ServletFromHandler;
+import annotations.params.METHOD_REST;
 import tiw.is.vols.livraison.dao.BaggageDao;
 import tiw.is.vols.livraison.dao.FlightDao;
 import tiw.is.vols.livraison.dto.BaggageDTO;
@@ -12,6 +14,11 @@ import tiw.is.vols.livraison.model.Baggage;
 import tiw.is.vols.livraison.model.Flight;
 
 @Handler
+@ServletFromHandler(
+        path = "baggage/create",
+        method = METHOD_REST.POST,
+        params = {"id", "weight", "passenger"}
+)
 public class CreateBaggageCommandHandler implements ICommandHandler<BaggageDTO, CreateBaggageCommand> {
     private final BaggageDao dao;
     private final FlightDao flightDao;

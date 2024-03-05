@@ -1,9 +1,6 @@
 package tiw.is.vols.livraison.servlet;
 
-import annotations.Component;
-import annotations.Servlet;
-import annotations.params.COMPONENT_TYPE;
-import annotations.params.METHOD_REST;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -14,14 +11,10 @@ import tiw.is.server.utils.JsonFormatter;
 import tiw.is.vols.livraison.command.resource.baggage.GetBaggagesCommand;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-@Servlet(
-        path = "baggages",
-        method = METHOD_REST.POST
-)
-@Component(
-        type = COMPONENT_TYPE.SERVLET
-)
+
 public class GetBaggagesCommandHandlerServlet extends HttpServlet {
     private final CommandBus commandBus;
     private static final JsonFormatter<GetBaggagesCommand> formatter = new JsonFormatter<>();
@@ -38,14 +31,21 @@ public class GetBaggagesCommandHandlerServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json");
+        Map<String, Object> map = new HashMap<>();
 
         try {
-            GetBaggagesCommand command = new GetBaggagesCommand();
-            String baggage = formatter.serializeObject(this.commandBus.handle(command));
-            resp.getWriter().write(baggage);
+            String response = formatter.serializeObject(this.commandBus.handle(
+                    mapToCommand(map)
+            ));
+            resp.getWriter().write(response);
 
         } catch (Exception e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }
+    }
+
+    private GetBaggagesCommand mapToCommand(Map<String, Object> params) {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.convertValue(params, GetBaggagesCommand.class);
     }
 }

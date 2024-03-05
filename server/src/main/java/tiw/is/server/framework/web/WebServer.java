@@ -1,5 +1,6 @@
 package tiw.is.server.framework.web;
 
+import annotations.RestPath;
 import jakarta.servlet.http.HttpServlet;
 import org.apache.catalina.LifecycleException;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ public class WebServer {
     }
 
     public void start() throws LifecycleException {
+        addServlets();
         endpoint.startBatch();
     }
 
@@ -26,13 +28,15 @@ public class WebServer {
         endpoint.stopBatch();
     }
 
-    public void addServlets(Set<Class<?>> servlets) {
+    public void addServlets() {
+        Set<Class<HttpServlet>> servlets = serveur.getContainer().getComponent(ServletSet.class).servlets;
         logger.info("AddServlets called with " + servlets.size() + " arguments.");
-        for(Class<?> c: servlets) {
-            logger.info("Adding servlet " + c);
+        for(Class<?> servlet: servlets) {
+            String path = servlet.getAnnotation(RestPath.class).path();
+            logger.info("Adding servlet " + servlet);
             endpoint.addServlet((HttpServlet) serveur
                     .getContainer()
-                    .getComponent(c), "/" + c.getAnnotation(annotations.Servlet.class).path());
+                    .getComponent(servlet), "/" + path);
         }
     }
 

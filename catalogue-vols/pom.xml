@@ -107,6 +107,9 @@
           <generatedSourcesDirectory>${project.build.directory}/generated-sources/</generatedSourcesDirectory>
           <annotationProcessors>
             <annotationProcessor>
+              annotations.processors.ServletProcessor
+            </annotationProcessor>
+            <annotationProcessor>
               annotations.processors.BaseProcessor
             </annotationProcessor>
             <annotationProcessor>
@@ -121,9 +124,6 @@
             <annotationProcessor>
               annotations.processors.DispatcherProcessor
             </annotationProcessor>
-            <!--<annotationProcessor>
-              annotations.processors.ServletProcessor
-            </annotationProcessor>-->
           </annotationProcessors>
         </configuration>
       </plugin>
