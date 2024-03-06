@@ -1,6 +1,8 @@
 package tiw.is.vols.livraison.handler.service.flight;
 
 import annotations.Handler;
+import annotations.ServletFromHandler;
+import annotations.params.METHOD_REST;
 import tiw.is.server.commandBus.ICommandHandler;
 import tiw.is.vols.livraison.dao.BaggageDao;
 import tiw.is.vols.livraison.dao.FlightDao;
@@ -13,6 +15,11 @@ import java.util.Collection;
 import java.util.Optional;
 
 @Handler
+@ServletFromHandler(
+        path = "flight/lostBaggages",
+        method = METHOD_REST.GET,
+        params = {"id"}
+)
 public class GetLostBaggagesCommandHandler implements ICommandHandler<Collection<BaggageDTO>, GetLostBaggagesCommand> {
 
     private final FlightDao dao;

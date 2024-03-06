@@ -14,8 +14,7 @@ import java.util.Collection;
 @Handler
 @ServletFromHandler(
         path = "baggages",
-        method = METHOD_REST.GET,
-        params = {}
+        method = METHOD_REST.GET
 )
 public class GetBaggagesCommandHandler implements ICommandHandler<Collection<BaggageDTO>, GetBaggagesCommand> {
     private final BaggageDao dao;

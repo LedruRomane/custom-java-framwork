@@ -132,7 +132,7 @@ public class ProcessorHelper {
             case "Persistence":
                 addPersistentComponent(element, mapper, annotationInfos);
                 break;
-            case "ServletFromHandler":
+            case "Servlet":
                 addServletComponent(element, mapper, "servlets-components");
                 break;
             default:

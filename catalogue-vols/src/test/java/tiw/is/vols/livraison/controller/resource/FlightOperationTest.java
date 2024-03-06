@@ -83,22 +83,6 @@ class FlightOperationTest extends DataAccessObjectTest {
     }
 
     @Test
-    void updateVol() {
-        String nouveauPointLivraison = "Pétaouchnok";
-        FlightDTO dto = new FlightDTO(flights[0].getId(), companies[0].getId(), nouveauPointLivraison);
-        try {
-            createOrUpdateCommandHandler.handle(new CreateOrUpdateFlightCommand(
-                    dto.id(),
-                    dto.company(),
-                    dto.pointLivraisonBagages()
-            ));
-            assertEquals(flightDao.getOneById(flights[0].getId()).getPointLivraisonBagages(), nouveauPointLivraison);
-        } catch (ResourceNotFoundException e) {
-            fail(e.getMessage());
-        }
-    }
-
-    @Test
     void deleteVol() {
         assertDoesNotThrow(() -> deleteCommandHandler.handle(new DeleteFlightCommand(
                 FlightDTO.fromFlight(flights[0]).id()

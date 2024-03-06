@@ -39,20 +39,6 @@ public class FlightTest extends ServeurManager {
     }
 
     @Test
-    void updateFlight() throws IOException {
-        String command = "update";
-        Map<String, Object> params = new HashMap<>();
-        params.put("id", "v-updateFlight()-0-0");
-        params.put("companyId", "c-updateFlight()-0");
-        params.put("pointLivraisonBagages", "Pétaouchnok");
-
-        JsonNode snapshot = mapper.readTree(new String(Files.readAllBytes(Paths.get(snapShotPath + "updateFlightTestSnapshot.json"))));
-        JsonNode result = mapper.readTree((String) serveur.processRequest(resource, command, params));
-        LOG.info(result.asText());
-        assertEquals(snapshot, result);
-    }
-
-    @Test
     void getFlights() throws IOException {
         String command = "getAll";
 

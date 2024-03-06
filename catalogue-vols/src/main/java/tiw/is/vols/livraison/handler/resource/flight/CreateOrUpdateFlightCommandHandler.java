@@ -1,6 +1,8 @@
 package tiw.is.vols.livraison.handler.resource.flight;
 
 import annotations.Handler;
+import annotations.ServletFromHandler;
+import annotations.params.METHOD_REST;
 import tiw.is.vols.livraison.dao.CompanyDao;
 import tiw.is.vols.livraison.dao.FlightDao;
 import tiw.is.vols.livraison.dto.FlightDTO;
@@ -13,6 +15,11 @@ import tiw.is.vols.livraison.model.Flight;
 import java.util.Optional;
 
 @Handler
+@ServletFromHandler(
+        path = "flight/create",
+        method = METHOD_REST.POST,
+        params = {"id", "companyID", "pointLivraisonBagages"}
+)
 public class CreateOrUpdateFlightCommandHandler implements ICommandHandler<FlightDTO, CreateOrUpdateFlightCommand> {
 
     private final FlightDao dao;

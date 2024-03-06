@@ -48,13 +48,8 @@ public class FlightDao implements IDataAccessObject<Flight> {
         if (em.contains(v)) {
             return v;
         } else {
-            Flight v2 = em.find(Flight.class, v.getId());
-            if (v2 == null) {
-                em.persist(v);
-                return v;
-            } else {
-                return em.merge(v);
-            }
+            em.persist(v);
+            return em.merge(v);
         }
     }
 

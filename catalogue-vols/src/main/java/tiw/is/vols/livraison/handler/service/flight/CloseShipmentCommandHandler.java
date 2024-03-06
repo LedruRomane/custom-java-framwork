@@ -1,6 +1,8 @@
 package tiw.is.vols.livraison.handler.service.flight;
 
 import annotations.Handler;
+import annotations.ServletFromHandler;
+import annotations.params.METHOD_REST;
 import tiw.is.server.commandBus.ICommandHandler;
 import tiw.is.vols.livraison.command.service.flight.CloseShipmentCommand;
 import tiw.is.vols.livraison.dao.FlightDao;
@@ -10,6 +12,11 @@ import tiw.is.vols.livraison.model.Flight;
 import java.util.Optional;
 
 @Handler
+@ServletFromHandler(
+        path = "flight/close",
+        method = METHOD_REST.POST,
+        params = {"id"}
+)
 public class CloseShipmentCommandHandler implements ICommandHandler<Boolean, CloseShipmentCommand> {
 
     private final FlightDao dao;

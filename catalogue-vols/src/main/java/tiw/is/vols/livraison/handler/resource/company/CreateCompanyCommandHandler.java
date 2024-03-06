@@ -1,6 +1,8 @@
 package tiw.is.vols.livraison.handler.resource.company;
 
 import annotations.Handler;
+import annotations.ServletFromHandler;
+import annotations.params.METHOD_REST;
 import tiw.is.vols.livraison.dao.CompanyDao;
 import tiw.is.vols.livraison.exception.ResourceAlreadyExistsException;
 import tiw.is.vols.livraison.command.resource.company.CreateCompanyCommand;
@@ -13,6 +15,11 @@ import tiw.is.vols.livraison.model.Company;
  * Should implement the HandlerInterface to ensure a strong typing check.
  */
 @Handler
+@ServletFromHandler(
+        path = "company/create",
+        method = METHOD_REST.POST,
+        params = {"id"}
+)
 public class CreateCompanyCommandHandler implements ICommandHandler<Company, CreateCompanyCommand> {
 
     private final CompanyDao dao;

@@ -35,7 +35,8 @@ test-catalogue-vols:
     POSTGRES_DB: catalogue-db
     DB_HOST: postgres
   script:
-    - mvn $MAVEN_CLI_OPTS test
+    - mvn $MAVEN_CLI_OPTS clean compile
+    - mvn $MAVEN_CLI_OPTS clean test
 
 sonarqube-check:
   stage: sonarqube-check

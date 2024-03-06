@@ -11,8 +11,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>server</module>
         <module>base-processor</module>
+        <module>server</module>
         <module>catalogue-vols</module>
         <module>integration</module>
     </modules>
