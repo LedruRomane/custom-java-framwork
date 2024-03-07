@@ -35,8 +35,7 @@ test-catalogue-vols:
     POSTGRES_DB: catalogue-db
     DB_HOST: postgres
   script:
-    - mvn $MAVEN_CLI_OPTS clean compile
-    - mvn $MAVEN_CLI_OPTS clean test
+    - mvn $MAVEN_CLI_OPTS clean install
 
 sonarqube-check:
   stage: sonarqube-check
@@ -55,7 +54,7 @@ sonarqube-check:
     paths:
       - .sonar/cache
   script:
-    - mvn $MAVEN_CLI_OPTS verify sonar:sonar
+    - mvn clean $MAVEN_CLI_OPTS verify sonar:sonar
   allow_failure: true
   rules:
     - if: $SONAR_PROJECT_KEY != null && $SONAR_HOST_URL != null && $SONAR_TOKEN != null && $CI_COMMIT_BRANCH == "main"

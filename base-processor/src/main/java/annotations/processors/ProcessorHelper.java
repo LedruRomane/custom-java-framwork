@@ -24,24 +24,16 @@ public class ProcessorHelper {
     public static String path = "src/main/resources/appConfiguration.json";
 
     static void generateConstructor(TypeElement parentClass, TypeSpec.Builder subComponentBuilder) {
-        // Add constructor(s)
         for (Element enclosedElement : parentClass.getEnclosedElements()) {
             if (enclosedElement.getKind() == ElementKind.CONSTRUCTOR) {
                 List<ParameterSpec> parameters = new ArrayList<>();
 
-                // Create a string builder to hold the super() call
                 StringBuilder superStatement = new StringBuilder("super(");
-
-                // Get the parameters from the current constructor
                 int index = 0;
                 for (VariableElement parameter : ((ExecutableElement) enclosedElement).getParameters()) {
-                    // Add the parameter to the list of parameters
                     parameters.add(ParameterSpec.builder(TypeName.get(parameter.asType()), parameter.getSimpleName().toString()).build());
-
-                    // Add the parameter to the super() call
                     superStatement.append(parameter.getSimpleName());
 
-                    // Add a comma if this is not the last parameter
                     if (index < ((ExecutableElement) enclosedElement).getParameters().size() - 1) {
                         superStatement.append(", ");
                     }
@@ -52,14 +44,12 @@ public class ProcessorHelper {
                 // Close the super() call
                 superStatement.append(")");
 
-                // Create the new constructor
                 MethodSpec newConstructor = MethodSpec.constructorBuilder()
                         .addModifiers(Modifier.PUBLIC)
                         .addParameters(parameters)
                         .addStatement(superStatement.toString())
                         .build();
 
-                // Add the new constructor to the subclass
                 subComponentBuilder.addMethod(newConstructor);
             }
         }
@@ -117,149 +107,93 @@ public class ProcessorHelper {
     public static void addNewLineToAppConfiguration(String element, Map annotationInfos) {
 
         ObjectMapper mapper = new ObjectMapper();
-        // switch element type (get from the last _example in element string)
+        // switch which ANNOTATION it is.
         String type = element.substring(element.lastIndexOf("_") + 1);
         switch (type) {
             case "Data":
-                addClassicComponent(element, mapper, "data-components");
+                addComponent(element, mapper, "data-components", "default", null, null);
                 break;
             case "Dispatcher":
-                addClassicComponent(element, mapper, "dispatcher-components");
+                addComponent(element, mapper, "dispatcher-components", "default", null, null);
                 break;
             case "Handler":
-                addHandlerComponent(element, mapper, "handlers-components");
+                addComponent(element, mapper, "handlers-components", "handler", "handler-locator", null);
                 break;
             case "Persistence":
-                addPersistentComponent(element, mapper, annotationInfos);
+                addComponent(element, mapper, "persistence-components", "persistence", null, annotationInfos);
                 break;
             case "Servlet":
-                addServletComponent(element, mapper, "servlets-components");
+                addComponent(element, mapper, "servlets-components", "servlet", "servlet-set", null);
                 break;
             default:
-                addClassicComponent(element, mapper, "components");
+                addComponent(element, mapper, "components", "default", null, null);
                 break;
         }
     }
 
-    public static void addClassicComponent(String element, ObjectMapper mapper, String namespace) {
+    public static void addComponent(String element, ObjectMapper mapper, String namespace, String type, String elementName, Map annotationInfos) {
         try {
             JsonNode appConfiguration = getOrCreateAppConfiguration();
             JsonNode appConfig = appConfiguration.get("application-config");
             ObjectNode newNode = mapper.createObjectNode();
-            newNode.put("class-name", element.toString() + "_Component");
+            newNode.put("class-name", element + "_Component");
 
             if (appConfig.has(namespace)) {
-                ((ArrayNode) appConfig.get(namespace)).add(newNode);
+                switch (type) {
+                    case "servlet", "handler" :
+                        JsonNode servletsComponents = appConfig.get(namespace);
+                        ArrayNode servletsComponentsArray = (ArrayNode) servletsComponents;
+                        JsonNode servletsNode = servletsComponentsArray.get(0);
+
+                        ((ArrayNode) servletsNode.get("arguments")).add(newNode);
+                        break;
+                    case "persistence":
+                        return;
+                    default:
+                        ((ArrayNode) appConfig.get(namespace)).add(newNode);
+                }
             } else {
-                ((ObjectNode) appConfiguration.get("application-config")).putArray(namespace).add(newNode);
+                switch (type) {
+                    case "servlet", "handler" :
+                        ObjectNode typeNode = mapper.createObjectNode();
+                        typeNode.put("type", elementName);
+                        ArrayNode arguments = typeNode.putArray("arguments");
+                        arguments.add(newNode);
+                        ((ObjectNode) appConfiguration.get("application-config")).putArray(namespace).add(typeNode);
+                        break;
+                    case "persistence":
+                        ObjectNode componentNode = mapper.createObjectNode();
+                        ObjectNode entityManagerNode = mapper.createObjectNode();
+                        ObjectNode factoryNode = mapper.createObjectNode();
+                        ArrayNode params = mapper.createArrayNode();
+
+                        params.add(mapper.createObjectNode().put("name", "DB_HOST").put("value", (String) annotationInfos.get("dbhost")));
+                        params.add(mapper.createObjectNode().put("name", "DB_NAME").put("value", (String) annotationInfos.get("dbname")));
+                        params.add(mapper.createObjectNode().put("name", "DB_USER").put("value", (String) annotationInfos.get("dbuser")));
+                        params.add(mapper.createObjectNode().put("name", "DB_PASSWORD").put("value", (String) annotationInfos.get("dbpassword")));
+
+                        componentNode.put("class-name", element + "_Component");
+                        componentNode.put("params", params);
+
+                        entityManagerNode.put("class-name", "jakarta.persistence.EntityManagerFactory");
+                        entityManagerNode.put("factory-type", element + "_Component");
+                        entityManagerNode.put("factory-method", "createEntityManagerFactory");
+
+                        factoryNode.put("class-name", "jakarta.persistence.EntityManager");
+                        factoryNode.put("factory-type", "jakarta.persistence.EntityManagerFactory");
+                        factoryNode.put("factory-method","createEntityManager");
+
+                        ((ObjectNode) appConfiguration.get("application-config")).putArray("persistence-components");
+                        ((ArrayNode) appConfig.get("persistence-components")).add(componentNode);
+                        ((ArrayNode) appConfig.get("persistence-components")).add(entityManagerNode);
+                        ((ArrayNode) appConfig.get("persistence-components")).add(factoryNode);
+                        break;
+                    default:
+                        ((ObjectNode) appConfiguration.get("application-config")).putArray(namespace).add(newNode);
+                }
             }
 
             // Write the modified appConfiguration back to the file
-            mapper.writeValue(new File(path), appConfiguration);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void addServletComponent(String element, ObjectMapper mapper, String namespace) {
-        try {
-            JsonNode appConfiguration = getOrCreateAppConfiguration();
-            JsonNode appConfig = appConfiguration.get("application-config");
-
-            if (appConfig.has(namespace)) {
-                JsonNode servletsComponents = appConfig.get(namespace);
-                ArrayNode servletsComponentsArray = (ArrayNode) servletsComponents;
-                JsonNode servletsNode = servletsComponentsArray.get(0);
-
-                ((ArrayNode) servletsNode.get("arguments")).add(
-                        mapper.createObjectNode().put("class-name", element + "_Component")
-                );
-            } else {
-                ObjectNode newNode = mapper.createObjectNode();
-                newNode.put("type", "servlet-set");
-                ArrayNode arguments = newNode.putArray("arguments");
-                arguments.add(mapper.createObjectNode().put("class-name", element + "_Component"));
-                ((ObjectNode) appConfiguration.get("application-config")).putArray(namespace).add(newNode);
-            }
-
-            // Write the modified appConfiguration.json file back to the disk
-            mapper.writeValue(new File(path), appConfiguration);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //todo: refactor in one with servlet
-    public static void addHandlerComponent(String element, ObjectMapper mapper, String namespace) {
-        try {
-            JsonNode appConfiguration = getOrCreateAppConfiguration();
-            JsonNode appConfig = appConfiguration.get("application-config");
-
-            if (appConfig.has(namespace)) {
-                JsonNode handlersComponents = appConfig.get(namespace);
-                ArrayNode handlersComponentsArray = (ArrayNode) handlersComponents;
-                JsonNode handlersNode = handlersComponentsArray.get(0);
-
-                ((ArrayNode) handlersNode.get("arguments")).add(
-                        mapper.createObjectNode().put("class-name", element + "_Component")
-                );
-            } else {
-                ObjectNode newNode = mapper.createObjectNode();
-                newNode.put("type", "handler-locator");
-                ArrayNode arguments = newNode.putArray("arguments");
-                arguments.add(mapper.createObjectNode().put("class-name", element + "_Component"));
-                ((ObjectNode) appConfiguration.get("application-config")).putArray(namespace).add(newNode);
-            }
-
-            // Write the modified appConfiguration.json file back to the disk
-            mapper.writeValue(new File(path), appConfiguration);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void addPersistentComponent(String element, ObjectMapper mapper, Map annotationInfos) {
-        // extract annotation infos
-        String dbhost = (String) annotationInfos.get("dbhost");
-        String dbname = (String) annotationInfos.get("dbname");
-        String dbuser = (String) annotationInfos.get("dbuser");
-        String dbpassword = (String) annotationInfos.get("dbpassword");
-
-        try {
-            JsonNode appConfiguration = getOrCreateAppConfiguration();
-            JsonNode appConfig = appConfiguration.get("application-config");
-
-            if (appConfig.has("persistence-components")) {
-                // don't add a persistence component if it already exists.
-                return;
-            } else {
-                ObjectNode componentNode = mapper.createObjectNode();
-                ObjectNode entityManagerNode = mapper.createObjectNode();
-                ObjectNode factoryNode = mapper.createObjectNode();
-                ArrayNode params = mapper.createArrayNode();
-
-                params.add(mapper.createObjectNode().put("name", "DB_HOST").put("value", dbhost));
-                params.add(mapper.createObjectNode().put("name", "DB_NAME").put("value", dbname));
-                params.add(mapper.createObjectNode().put("name", "DB_USER").put("value", dbuser));
-                params.add(mapper.createObjectNode().put("name", "DB_PASSWORD").put("value", dbpassword));
-
-                componentNode.put("class-name", element + "_Component");
-                componentNode.put("params", params);
-
-                entityManagerNode.put("class-name", "jakarta.persistence.EntityManagerFactory");
-                entityManagerNode.put("factory-type", element + "_Component");
-                entityManagerNode.put("factory-method", "createEntityManagerFactory");
-
-                factoryNode.put("class-name", "jakarta.persistence.EntityManager");
-                factoryNode.put("factory-type", "jakarta.persistence.EntityManagerFactory");
-                factoryNode.put("factory-method","createEntityManager");
-
-                ((ObjectNode) appConfiguration.get("application-config")).putArray("persistence-components");
-                ((ArrayNode) appConfig.get("persistence-components")).add(componentNode);
-                ((ArrayNode) appConfig.get("persistence-components")).add(entityManagerNode);
-                ((ArrayNode) appConfig.get("persistence-components")).add(factoryNode);
-           }
-            // Write the modified appConfiguration.json file back to the disk
             mapper.writeValue(new File(path), appConfiguration);
         } catch (IOException e) {
             e.printStackTrace();

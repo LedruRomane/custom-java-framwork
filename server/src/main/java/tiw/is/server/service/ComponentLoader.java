@@ -30,9 +30,7 @@ public class ComponentLoader {
      */
     public static void load(JsonObject component, MutablePicoContainer picoContainer) {
         try {
-            if (component.containsKey("type")) {
-                //handler
-                if (component.get("type").toString().equals("\"handler-locator\"")) {
+            if (component.containsKey("type") && component.get("type").toString().equals("\"handler-locator\"")) {
                     // Instantiate the locator:
                     Map<Class, ICommandHandler<Object, ICommand>> handlerLocator = new HashMap<>();
                     JsonArray handlers =  component.getJsonArray("arguments");
@@ -51,7 +49,7 @@ public class ComponentLoader {
                 }
 
                 //servlet
-                if (component.get("type").toString().equals("\"servlet-set\"")) {
+                if (component.containsKey("type") && component.get("type").toString().equals("\"servlet-set\"")) {
                     picoContainer.addComponent(ServletSet.class);
 
                     Set<Class<HttpServlet>> servletSet = new HashSet<>();
@@ -68,7 +66,6 @@ public class ComponentLoader {
 
                     return;
                 }
-            }
 
             String className = component.getString("class-name");
             Class<?> clazz = Class.forName(className);

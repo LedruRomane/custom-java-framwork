@@ -36,18 +36,6 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                  <groupId>tiw.is</groupId>
-                  <artifactId>server</artifactId>
-                  <version>1.0-SNAPSHOT</version>
-                  <executions>
-                    <execution>
-                      <goals>
-                        <goal>startServer</goal>
-                      </goals>
-                    </execution>
-                  </executions>
-                </plugin>
-                <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>${jacoco.version}</version>
