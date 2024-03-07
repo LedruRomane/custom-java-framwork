@@ -27,6 +27,6 @@ Voir la collection POSTMAN pour les requêtes API :
 
 ## Documentation TP
 
-- [Readme TP2](./doc/TP2.md)
-- [Readme TP3](./doc/TP3.md)
-- [Readme TP4](./doc/TP4.md)
+- [Readme TP2](./docs/TP2.md)
+- [Readme TP3](./docs/TP3.md)
+- [Readme TP4](./docs/TP4.md)
