@@ -12,7 +12,7 @@ import java.io.File;
 
 public class HttpEndpoint {
 
-    private static final int DELAY = 30;
+    public static final int DELAY = 30;
     private static final Logger log = LoggerFactory.getLogger(HttpEndpoint.class);
     private static HttpEndpoint instance;
     private final Tomcat tomcat;

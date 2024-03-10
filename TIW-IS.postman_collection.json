@@ -217,6 +217,56 @@
 					"response": []
 				},
 				{
+					"name": "CREATE errors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 400\", function () {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});",
+									"",
+									"pm.test(\"Response has the error message\", function () {",
+									"    const responseData = pm.response.text();",
+									"    pm.expect(responseData).to.include(\"The flight doesn&#39;t exist: unknown flight\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"unknown flight\",\n    \"weight\": \"9\",\n    \"passenger\": \"John Doe\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/baggage/create",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"baggage",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "DELETE",
 					"event": [
 						{
@@ -416,6 +466,62 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "GET errors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 400\", function () {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});",
+									"",
+									"pm.test(\"Response has the error message\", function () {",
+									"    const responseData = pm.response.text();",
+									"    pm.expect(responseData).to.include(\"Le vol unknow n&#39;existe pas, ou le bagage 2 n&#39;existe pas.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/baggage?id=unknow&num=2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"baggage"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "unknow"
+								},
+								{
+									"key": "num",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -601,6 +707,56 @@
 					"response": []
 				},
 				{
+					"name": "CREATE errors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 400\", function () {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});",
+									"",
+									"pm.test(\"Response has the error message\", function () {",
+									"    const responseData = pm.response.text();",
+									"    pm.expect(responseData).to.include(\"La compagnie unknown n&#39;existe pas.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"CUSTOM-FLIGHT-ID\",\n    \"companyID\": \"unknown\",\n    \"pointLivraisonBagages\": \"Paris\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/flight/create",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"flight",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "DELETE",
 					"event": [
 						{
@@ -776,6 +932,58 @@
 								{
 									"key": "id",
 									"value": "CUSTOM-FLIGHT-ID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET errors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 400\", function () {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});",
+									"",
+									"pm.test(\"Response has the error message\", function () {",
+									"    const responseData = pm.response.text();",
+									"    pm.expect(responseData).to.include(\"Le flight v-createCompany()-0-0 n&#39;existe pas.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/flight?id=v-createCompany()-0-0",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"flight"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "v-createCompany()-0-0"
 								}
 							]
 						}
@@ -1131,6 +1339,58 @@
 								{
 									"key": "id",
 									"value": "CUSTOM-COMPANY-ID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET errors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 400\", function () {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});",
+									"",
+									"pm.test(\"Response has the error message\", function () {",
+									"    const responseData = pm.response.text();",
+									"    pm.expect(responseData).to.include(\"La compagnie unknown n&#39;existe pas.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/company?id=unknown",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"company"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "unknown"
 								}
 							]
 						}

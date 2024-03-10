@@ -1,17 +1,3 @@
-# Étude et mise en place d'un Framework Java 🧐
-
-Ce projet a été réalisé dans le cadre de l'unité d'enseignement Intergiciel et Service (IS), qui vise à préparer les étudiants à travailler sur des systèmes d'information de dimension industrielle.
-
-Le projet nous a permis de comprendre et d'expérimenter le fonctionnement des frameworks basés sur des composants et des services, ainsi que de programmer et déployer ces éléments sur un serveur d'applications.
-
-Ce document sert de registre détaillant les concepts clés explorés durant notre phase de développement, les décisions techniques prises pour répondre aux exigences du projet et les instructions pour configurer un environnement de travail similaire à celui que nous avons utilisé.
-
-## Objectifs pédagogiques du projet 🎯
-
-- Appliquer différents patterns de conception (IoC, Contexte, Annuaire, Object pool, etc.) pour mieux comprendre le fonctionnement d'un framework.
-- Configurer un outil capable de gérer le cycle de vie de ses composants de manière autonome.
-- Utiliser des annotations pour automatiser la génération de code "boilerplate" non spécifique à une application.
-
 ## Qu'est-ce qu'un Framework et comment fonctionne-t-il ? 💡
 
 Un framework, en programmation, est comparable à un kit de construction ou à un ensemble d'outils préfabriqués. Imaginez construire une maison : vous pourriez fabriquer chaque brique et chaque fenêtre à partir de zéro (programmation sans framework), ou utiliser des éléments préconstruits à assembler selon un plan (programmation avec un framework).
@@ -123,10 +109,6 @@ Illustration de Romane montrant le fonctionnement synchrone et asynchrone du pat
 
 - **PicoContainer**: Une [librairie Java](http://picocontainer.com/introduction.html) conçue pour l'injection de dépendances, qui se distingue par sa simplicité et sa légèreté, facilitant l'intégration et la gestion des dépendances dans les projets.
 
-## Code Design ⚙️
-
-![Scéhma globale de l'application](docs/images/CodeDesign.png)
-
 ### Mapping des Commandes à un Handler
 
 Un défi de l'implémentation de la partie serveur de notre framework a été l'association des commandes à leur handler correspondant. Nous aurions pu définir cette association dans le fichier `appConfiguration`, mais cela aurait réduit la dynamique et la facilité de modification future.
@@ -145,10 +127,6 @@ Nous avons opté pour une Hashmap (`handlerLocator`) avec la signature suivante 
     - `ICommand`: Type de la Commande qui sera pris en entrée par la méthode `handle` des classes `Handler`.
 
 Avec cette Hashmap, nous avons appliqué le pattern **Command Bus** pour déléguer facilement les commandes à leurs handlers appropriés.
-
-Voici un schéma qui illustre comment nous alimentons cette Hashmap et l'utilisons au niveau de notre serveur avec le **Command Bus** :
-
-![Command Bus with Middleware interface code code actions](docs/images/Middlewares.png)
 
 Cet arrangement permet à notre serveur de dynamiquement diriger les commandes entrantes vers leurs gestionnaires respectifs, en utilisant le mécanisme centralisé du Command Bus. Ce mécanisme facilite l'ajout ou la modification des commandes et de leurs traitements, tout en conservant une structure de code claire et maintenable.
 
@@ -228,13 +206,13 @@ Cette étape est très importante puisqu'elle va permettre à notre serveur de l
 1. Ouvrez un terminal à la racine du projet.
 2. Lancez la commande suivante :
 ```shell
-mvn package # Ou en un clin d'œil avec "make build" 😉
+mvn clean package # Ou en un clin d'œil avec "make build" 😉
 ```
 
 Pour zapper les tests et gagner du temps :
 
 ```shell
-mvn package -Dmaven.test.skip=true # Ou en mode rapide "make build"
+mvn clean package -Dmaven.test.skip=true # Ou en mode rapide "make build"
 ```
 
 #### Lancement des tests 🧪
