@@ -21,9 +21,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <!--suppress UnresolvedMavenProperty -->
-        <sonar.projectKey>${env.SONAR_PROJECT_KEY}</sonar.projectKey>
         <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
+        <sonar.projectName>TIW_IS</sonar.projectName>
+        <sonar.projectKey>TIW_IS_P2105081</sonar.projectKey>
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
         <jacoco.version>0.8.11</jacoco.version>
         <sonar.coverage.jacoco.xmlReportPaths>

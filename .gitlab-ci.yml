@@ -57,5 +57,5 @@ sonarqube-check:
     - mvn clean $MAVEN_CLI_OPTS verify sonar:sonar
   allow_failure: true
   rules:
-    - if: $SONAR_PROJECT_KEY != null && $SONAR_HOST_URL != null && $SONAR_TOKEN != null && $CI_COMMIT_BRANCH == "main"
-    - if: $SONAR_PROJECT_KEY != null && $SONAR_HOST_URL != null && $SONAR_TOKEN != null && $CI_COMMIT_BRANCH =~ "/^tp.*/"
+    - if: $SONAR_HOST_URL != null && $SONAR_TOKEN != null && $CI_COMMIT_BRANCH == "main"
+    - if: $SONAR_HOST_URL != null && $SONAR_TOKEN != null && $CI_COMMIT_BRANCH =~ "/^tp.*/"
