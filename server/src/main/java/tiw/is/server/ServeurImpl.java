@@ -16,9 +16,13 @@ import tiw.is.server.service.IDispatcher;
 import tiw.is.server.utils.FixturesManager;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 public class ServeurImpl implements Serveur {
@@ -31,30 +35,37 @@ public class ServeurImpl implements Serveur {
      * Constructor Server, implement container and provide services & components.
      */
     public ServeurImpl(Path pathConfigurationFile) throws IOException {
-        String app = "application-config";
-        JsonObject configJson;
 
         this.picoContainer = new PicoBuilder(new ConstructorInjection())
                 .withCaching()
                 .withLifecycle(new StartableLifecycleStrategy(new NullComponentMonitor()))
                 .build();
 
+        InputStream serverStream = ServeurImpl.class.getResourceAsStream("/serverRootConfiguration.json");
+        String serverContent = new String(serverStream.readAllBytes(), StandardCharsets.UTF_8);
         String configContent = new String(Files.readAllBytes(pathConfigurationFile));
 
-        try (JsonReader reader = Json.createReader(new StringReader(configContent))) {
-            configJson = reader.readObject();
+        loadFromFile(configContent);
+        loadFromFile(serverContent);
 
-            loadComponents(configJson.getJsonObject(app).getJsonArray("persistence-components"));
-            loadComponents(configJson.getJsonObject(app).getJsonArray("data-components"));
-            loadComponents(configJson.getJsonObject(app).getJsonArray("handlers-components"));
-            loadComponents(configJson.getJsonObject(app).getJsonArray("commandbus-components"));
-            loadComponents(configJson.getJsonObject(app).getJsonArray("dispatcher-components"));
 
-            // Functional tests database's fixture manager.
-            picoContainer.addComponent(FixturesManager.class);
+        // Functional tests database's fixture manager.
+        picoContainer.addComponent(FixturesManager.class);
 
-            log.info("---------------------------  [SERVER INFO: START]  ---------------------------");
-            picoContainer.start();
+        log.info("---------------------------  [SERVER INFO: START]  ---------------------------");
+        picoContainer.start();
+    }
+
+    private void loadFromFile(String path) {
+        String app = "application-config";
+
+        try (JsonReader reader = Json.createReader(new StringReader(path))) {
+            JsonObject jsonContent = reader.readObject();
+            JsonObject appConfig = jsonContent.getJsonObject(app);
+
+            for (String key : appConfig.keySet()) {
+                loadComponents(appConfig.getJsonArray(key));
+            }
         }
     }
 

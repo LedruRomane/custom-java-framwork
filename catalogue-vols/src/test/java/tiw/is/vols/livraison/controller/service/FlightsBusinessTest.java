@@ -3,7 +3,7 @@ package tiw.is.vols.livraison.controller.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
-import tiw.is.vols.livraison.dao.DataAccessObjectTest;
+import tiw.is.vols.livraison.DataAccessObjectTest;
 import tiw.is.vols.livraison.dto.BaggageDTO;
 import tiw.is.vols.livraison.dto.FlightDTO;
 import tiw.is.vols.livraison.exception.ResourceNotFoundException;
@@ -37,7 +37,7 @@ class FlightsBusinessTest extends DataAccessObjectTest {
     void fermerLivraison() {
         assertDoesNotThrow(() ->
                 closeShipmentCommandHandler.handle(new CloseShipmentCommand(
-                        FlightDTO.fromFlight(flights[0]).id()
+                        FlightDTO.fromFlight(flights[1]).id()
                 )));
         assertThrows(ResourceNotFoundException.class, () ->
                 closeShipmentCommandHandler.handle(new CloseShipmentCommand(
@@ -73,7 +73,7 @@ class FlightsBusinessTest extends DataAccessObjectTest {
         }
         assertThrows(IllegalStateException.class,
                 () -> getLostBaggagesCommandHandler.handle(new GetLostBaggagesCommand(
-                        FlightDTO.fromFlight(flights[3]).id()
+                        FlightDTO.fromFlight(flights[2]).id()
                 )));
         assertThrows(ResourceNotFoundException.class, () ->
                 getLostBaggagesCommandHandler.handle(new GetLostBaggagesCommand(

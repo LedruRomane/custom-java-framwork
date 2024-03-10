@@ -1,5 +1,6 @@
 package tiw.is.vols.livraison.dao;
 
+import annotations.Data;
 import jakarta.persistence.EntityManager;
 import tiw.is.vols.livraison.model.Baggage;
 import tiw.is.vols.livraison.model.Flight;
@@ -9,6 +10,7 @@ import java.util.Collection;
 /**
  * Data Access Object for Flight Model.
  */
+@Data
 public class FlightDao implements IDataAccessObject<Flight> {
 
     private final EntityManager em;
@@ -46,13 +48,8 @@ public class FlightDao implements IDataAccessObject<Flight> {
         if (em.contains(v)) {
             return v;
         } else {
-            Flight v2 = em.find(Flight.class, v.getId());
-            if (v2 == null) {
-                em.persist(v);
-                return v;
-            } else {
-                return em.merge(v);
-            }
+            em.persist(v);
+            return em.merge(v);
         }
     }
 

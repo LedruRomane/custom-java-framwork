@@ -13,15 +13,8 @@ import org.slf4j.LoggerFactory;
  *
  * @see <a href="https://github.com/cloudogu/command-bus/blob/develop/command-bus-core/src/main/java/com/cloudogu/cb/CommandHandler.java">...</a>
  */
-public interface ICommandHandler<R, C> extends Startable {
+public interface ICommandHandler<R, C> {
     Logger logger = LoggerFactory.getLogger(ICommandHandler.class);
 
     R handle(C command) throws Exception;
-
-
-    default void start() {
-        logger.info("Composant démarré : {}", this.getClass().getName());
-    }
-
-    default void stop() {}
 }

@@ -10,6 +10,13 @@
     <name>root-project</name>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>base-processor</module>
+        <module>server</module>
+        <module>catalogue-vols</module>
+        <module>integration</module>
+    </modules>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
@@ -24,12 +31,6 @@
             ${project.basedir}/integration/target/site/jacoco-aggregate/jacoco.xml
         </sonar.coverage.jacoco.xmlReportPaths>
     </properties>
-
-    <modules>
-        <module>catalogue-vols</module>
-        <module>integration</module>
-        <module>server</module>
-    </modules>
 
     <build>
         <pluginManagement>

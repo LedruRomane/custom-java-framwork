@@ -1,0 +1,1868 @@
+{
+	"info": {
+		"_postman_id": "06db3541-7e1a-4031-950a-bc8954b129e5",
+		"name": "TIW-IS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23470600"
+	},
+	"item": [
+		{
+			"name": "BAGGAGES",
+			"item": [
+				{
+					"name": "GET ALL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+									"    responseData.forEach(function(item) {",
+									"        pm.expect(item).to.have.property('flightId');",
+									"        pm.expect(item).to.have.property('numero');",
+									"        pm.expect(item).to.have.property('weight');",
+									"        pm.expect(item).to.have.property('passenger');",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"FlightId is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('array');",
+									"  responseData.forEach(function(baggage) {",
+									"    pm.expect(baggage.flightId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"FlightId should be a non-empty string\");",
+									"  });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Weight is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array');",
+									"    responseData.forEach(function(baggage){",
+									"        pm.expect(baggage.weight).to.be.a('number').and.to.satisfy((val) => val >= 0, \"Weight must be a non-negative integer\");",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Baggages array is present and contains expected number of elements\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('array');",
+									"    pm.expect(responseData).to.have.lengthOf.at.least(1, \"Baggages array should contain at least one element\");",
+									"});",
+									"",
+									"pm.test(\"Check count baggages = 666\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;",
+									"    pm.expect(responseJson.length).to.eql(666);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/baggages",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"baggages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('flightId');",
+									"    pm.expect(responseData).to.have.property('numero');",
+									"    pm.expect(responseData).to.have.property('weight');",
+									"    pm.expect(responseData).to.have.property('passenger');",
+									"});",
+									"",
+									"",
+									"pm.test(\"FlightId is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.flightId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"FlightId should be a non-empty string\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Weight is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.weight).to.be.a('number');",
+									"    pm.expect(responseData.weight).to.be.at.least(0, \"Weight should be a non-negative integer\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify Content-Type header is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test(\"Response has the expected values\", function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData.flightId).to.eql(\"v-createCompany()-0-0\");",
+									"    pm.expect(responseData.weight).to.eql(9.0);",
+									"    pm.expect(responseData.passenger).to.eql(\"John Doe\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"v-createCompany()-0-0\",\n    \"weight\": \"9\",\n    \"passenger\": \"John Doe\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/baggage/create",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"baggage",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check baggages count = 666+1 = 667\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;",
+									"    pm.expect(responseJson.length).to.eql(667);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/baggages",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"baggages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE errors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 400\", function () {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});",
+									"",
+									"pm.test(\"Response has the error message\", function () {",
+									"    const responseData = pm.response.text();",
+									"    pm.expect(responseData).to.include(\"The flight doesn&#39;t exist: unknown flight\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"unknown flight\",\n    \"weight\": \"9\",\n    \"passenger\": \"John Doe\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/baggage/create",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"baggage",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the correct Content-Type header\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response body is a boolean value\", function () {",
+									"  const responseData = pm.response.json();",
+									"  pm.expect(responseData).to.be.a('boolean');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify that 'id' and 'num' parameters are correctly passed in the request URL\", function () {",
+									"    const requestUrl = pm.request.url.toString();",
+									"    ",
+									"    pm.expect(requestUrl).to.include(\"id=v-createCompany()-0-0\", \"id parameter is correctly passed\");",
+									"    pm.expect(requestUrl).to.include(\"num=1\", \"num parameter is correctly passed\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response body is true\", function () {",
+									"    pm.expect(pm.response.text()).to.equal(\"true\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/baggage/delete?id=v-createCompany()-0-0&num=1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"baggage",
+								"delete"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "v-createCompany()-0-0"
+								},
+								{
+									"key": "num",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL check 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check baggages count = 667-1 = 666\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;",
+									"    pm.expect(responseJson.length).to.eql(666);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/baggages",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"baggages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('flightId');",
+									"    pm.expect(responseData).to.have.property('numero');",
+									"    pm.expect(responseData).to.have.property('weight');",
+									"    pm.expect(responseData).to.have.property('passenger');",
+									"});",
+									"",
+									"",
+									"pm.test(\"FlightId is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.flightId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"FlightId should be a non-empty string\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Weight is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.weight).to.be.a('number');",
+									"    pm.expect(responseData.weight).to.be.at.least(0, \"Weight should be a non-negative integer\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify Content-Type header is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test(\"Response has the expected values\", function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData.flightId).to.eql(\"v-createCompany()-0-0\");",
+									"    pm.expect(responseData.weight).to.eql(9.0);",
+									"    pm.expect(responseData.passenger).to.eql(\"John Doe\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/baggage?id=v-createCompany()-0-0&num=2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"baggage"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "v-createCompany()-0-0"
+								},
+								{
+									"key": "num",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET errors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 400\", function () {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});",
+									"",
+									"pm.test(\"Response has the error message\", function () {",
+									"    const responseData = pm.response.text();",
+									"    pm.expect(responseData).to.include(\"Le vol unknow n&#39;existe pas, ou le bagage 2 n&#39;existe pas.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/baggage?id=unknow&num=2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"baggage"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "unknow"
+								},
+								{
+									"key": "num",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "FLIGHT",
+			"item": [
+				{
+					"name": "GET ALL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+									"    responseData.forEach(function(item) {",
+									"        pm.expect(item).to.have.property('id');",
+									"        pm.expect(item).to.have.property('company');",
+									"        pm.expect(item).to.have.property('pointLivraisonBagages');",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"ID is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('array');",
+									"  responseData.forEach(function(flight) {",
+									"    pm.expect(flight.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"ID should be a non-empty string\");",
+									"  });",
+									"});",
+									"",
+									"pm.test(\"Check count flights = 36\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;",
+									"    pm.expect(responseJson.length).to.eql(36);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/flights",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"flights"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('id');",
+									"    pm.expect(responseData).to.have.property('company');",
+									"    pm.expect(responseData).to.have.property('pointLivraisonBagages');",
+									"});",
+									"",
+									"",
+									"pm.test(\"ID is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"ID should be a non-empty string\");",
+									"});",
+									"",
+									"pm.test(\"Verify Content-Type header is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test(\"Response has the expected values\", function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData.id).to.eql(\"CUSTOM-FLIGHT-ID\");",
+									"    pm.expect(responseData.company).to.eql(\"c-createCompany()-0\");",
+									"    pm.expect(responseData.pointLivraisonBagages).to.eql(\"Paris\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"CUSTOM-FLIGHT-ID\",\n    \"companyID\": \"c-createCompany()-0\",\n    \"pointLivraisonBagages\": \"Paris\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/flight/create",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"flight",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check baggages count 36+1 = 37 \", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;",
+									"    pm.expect(responseJson.length).to.eql(37);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/flights",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"flights"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE errors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 400\", function () {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});",
+									"",
+									"pm.test(\"Response has the error message\", function () {",
+									"    const responseData = pm.response.text();",
+									"    pm.expect(responseData).to.include(\"La compagnie unknown n&#39;existe pas.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"CUSTOM-FLIGHT-ID\",\n    \"companyID\": \"unknown\",\n    \"pointLivraisonBagages\": \"Paris\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/flight/create",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"flight",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the correct Content-Type header\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response body is a boolean value\", function () {",
+									"  const responseData = pm.response.json();",
+									"  pm.expect(responseData).to.be.a('boolean');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify that 'id' parameter is correctly passed in the request URL\", function () {",
+									"    const requestUrl = pm.request.url.toString();",
+									"    ",
+									"    pm.expect(requestUrl).to.include(\"id=v-createCompany()-0-0\", \"id parameter is correctly passed\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response body is true\", function () {",
+									"    pm.expect(pm.response.text()).to.equal(\"true\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/flight/delete?id=v-createCompany()-0-0",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"flight",
+								"delete"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "v-createCompany()-0-0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check baggages count = 37-1 = 36\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;",
+									"    pm.expect(responseJson.length).to.eql(36);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/flights",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"flights"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('id');",
+									"    pm.expect(responseData).to.have.property('company');",
+									"    pm.expect(responseData).to.have.property('pointLivraisonBagages');",
+									"});",
+									"",
+									"",
+									"pm.test(\"ID is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"ID should be a non-empty string\");",
+									"});",
+									"",
+									"pm.test(\"Verify Content-Type header is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test(\"Response has the expected values\", function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData.id).to.eql(\"CUSTOM-FLIGHT-ID\");",
+									"    pm.expect(responseData.company).to.eql(\"c-createCompany()-0\");",
+									"    pm.expect(responseData.pointLivraisonBagages).to.eql(\"Paris\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/flight?id=CUSTOM-FLIGHT-ID",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"flight"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "CUSTOM-FLIGHT-ID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET errors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 400\", function () {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});",
+									"",
+									"pm.test(\"Response has the error message\", function () {",
+									"    const responseData = pm.response.text();",
+									"    pm.expect(responseData).to.include(\"Le flight v-createCompany()-0-0 n&#39;existe pas.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/flight?id=v-createCompany()-0-0",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"flight"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "v-createCompany()-0-0"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "COMPANY",
+			"item": [
+				{
+					"name": "GET ALL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+									"    responseData.forEach(function(item) {",
+									"        pm.expect(item).to.have.property('id');",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"ID is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('array');",
+									"  responseData.forEach(function(company) {",
+									"    pm.expect(company.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"ID should be a non-empty string\");",
+									"  });",
+									"});",
+									"",
+									"pm.test(\"Check count companies = 8\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;",
+									"    pm.expect(responseJson.length).to.eql(8);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/companies",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"companies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('id');",
+									"});",
+									"",
+									"",
+									"pm.test(\"ID is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"ID should be a non-empty string\");",
+									"});",
+									"",
+									"pm.test(\"Verify Content-Type header is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test(\"Response has the expected values\", function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData.id).to.eql(\"CUSTOM-COMPANY-ID\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"CUSTOM-COMPANY-ID\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/company/create",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"company",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check baggages count 8+1 = 9 \", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;",
+									"    pm.expect(responseJson.length).to.eql(9);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/companies",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"companies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the correct Content-Type header\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response body is a boolean value\", function () {",
+									"  const responseData = pm.response.json();",
+									"  pm.expect(responseData).to.be.a('boolean');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify that 'id' parameter is correctly passed in the request URL\", function () {",
+									"    const requestUrl = pm.request.url.toString();",
+									"    ",
+									"    pm.expect(requestUrl).to.include(\"id=c-createCompany()-0\", \"id parameter is correctly passed\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response body is true\", function () {",
+									"    pm.expect(pm.response.text()).to.equal(\"true\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/company/delete?id=c-createCompany()-0",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"company",
+								"delete"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "c-createCompany()-0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check baggages count = 9-1 = 8\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;",
+									"    pm.expect(responseJson.length).to.eql(8);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/companies",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"companies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('id');",
+									"});",
+									"",
+									"",
+									"pm.test(\"ID is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.id).to.be.a('string').and.to.have.lengthOf.at.least(1, \"ID should be a non-empty string\");",
+									"});",
+									"",
+									"pm.test(\"Verify Content-Type header is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test(\"Response has the expected values\", function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData.id).to.eql(\"CUSTOM-COMPANY-ID\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/company?id=CUSTOM-COMPANY-ID",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"company"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "CUSTOM-COMPANY-ID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET errors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 400\", function () {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});",
+									"",
+									"pm.test(\"Response has the error message\", function () {",
+									"    const responseData = pm.response.text();",
+									"    pm.expect(responseData).to.include(\"La compagnie unknown n&#39;existe pas.\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/company?id=unknown",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"company"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "unknown"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "OPERATIONS",
+			"item": [
+				{
+					"name": "CLOSE SHIPMENT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"pm.test(\"Verify Content-Type header is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test(\"Response body is a boolean value\", function () {",
+									"  const responseData = pm.response.json();",
+									"  pm.expect(responseData).to.be.a('boolean');",
+									"});",
+									"",
+									"pm.test(\"Response body is true\", function () {",
+									"    pm.expect(pm.response.text()).to.equal(\"true\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"v-createCompany()-4-1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/flight/close",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"flight",
+								"close"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MARK BAGGAGE AS DELIVER",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('flightId');",
+									"    pm.expect(responseData).to.have.property('numero');",
+									"    pm.expect(responseData).to.have.property('weight');",
+									"    pm.expect(responseData).to.have.property('passenger');",
+									"});",
+									"",
+									"",
+									"pm.test(\"FlightId is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.flightId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"FlightId should be a non-empty string\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Weight is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.weight).to.be.a('number');",
+									"    pm.expect(responseData.weight).to.be.at.least(0, \"Weight should be a non-negative integer\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify Content-Type header is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test(\"Response has the expected values\", function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData.flightId).to.eql(\"v-createCompany()-4-1\");",
+									"    pm.expect(responseData.numero).to.eql(2);",
+									"    pm.expect(responseData.weight).to.eql(120.0);",
+									"    pm.expect(responseData.passenger).to.eql(\"p-createCompany()-1\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"v-createCompany()-4-1\",\n    \"num\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/baggage/deliver",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"baggage",
+								"deliver"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET UNCLAIMED",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+									"    responseData.forEach(function(item) {",
+									"        pm.expect(item).to.have.property('flightId');",
+									"        pm.expect(item).to.have.property('numero');",
+									"        pm.expect(item).to.have.property('weight');",
+									"        pm.expect(item).to.have.property('passenger');",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"FlightId is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('array');",
+									"  responseData.forEach(function(baggage) {",
+									"    pm.expect(baggage.flightId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"FlightId should be a non-empty string\");",
+									"  });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Weight is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array');",
+									"    responseData.forEach(function(baggage){",
+									"        pm.expect(baggage.weight).to.be.a('number').and.to.satisfy((val) => val >= 0, \"Weight must be a non-negative integer\");",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Baggages array is present and contains expected number of elements\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('array');",
+									"    pm.expect(responseData).to.have.lengthOf.at.least(1, \"Baggages array should contain at least one element\");",
+									"});",
+									"",
+									"pm.test(\"Unclaimed count baggages = 5\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;",
+									"    pm.expect(responseJson.length).to.eql(5);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/flight/unclaimedBaggages?id=v-createCompany()-4-1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"flight",
+								"unclaimedBaggages"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "v-createCompany()-4-1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MARK BAGGAGE AS RETRIEVAL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('flightId');",
+									"    pm.expect(responseData).to.have.property('numero');",
+									"    pm.expect(responseData).to.have.property('weight');",
+									"    pm.expect(responseData).to.have.property('passenger');",
+									"});",
+									"",
+									"",
+									"pm.test(\"FlightId is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.flightId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"FlightId should be a non-empty string\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Weight is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.weight).to.be.a('number');",
+									"    pm.expect(responseData.weight).to.be.at.least(0, \"Weight should be a non-negative integer\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify Content-Type header is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test(\"Response has the expected values\", function () {",
+									"    const responseData = pm.response.json();",
+									"    pm.expect(responseData.flightId).to.eql(\"v-createCompany()-4-1\");",
+									"    pm.expect(responseData.numero).to.eql(2);",
+									"    pm.expect(responseData.weight).to.eql(120.0);",
+									"    pm.expect(responseData.passenger).to.eql(\"p-createCompany()-1\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"v-createCompany()-4-1\",\n    \"num\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/baggage/retrieval",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"baggage",
+								"retrieval"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET UNCLAIMED check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Unclaimed count baggages 5-1 = 4\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;",
+									"    pm.expect(responseJson.length).to.eql(4);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/flight/unclaimedBaggages?id=v-createCompany()-4-1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"flight",
+								"unclaimedBaggages"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "v-createCompany()-4-1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET LOSTS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array').that.is.not.empty;",
+									"    responseData.forEach(function(item) {",
+									"        pm.expect(item).to.have.property('flightId');",
+									"        pm.expect(item).to.have.property('numero');",
+									"        pm.expect(item).to.have.property('weight');",
+									"        pm.expect(item).to.have.property('passenger');",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"FlightId is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('array');",
+									"  responseData.forEach(function(baggage) {",
+									"    pm.expect(baggage.flightId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"FlightId should be a non-empty string\");",
+									"  });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Weight is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array');",
+									"    responseData.forEach(function(baggage){",
+									"        pm.expect(baggage.weight).to.be.a('number').and.to.satisfy((val) => val >= 0, \"Weight must be a non-negative integer\");",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Baggages array is present and contains expected number of elements\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('array');",
+									"    pm.expect(responseData).to.have.lengthOf.at.least(1, \"Baggages array should contain at least one element\");",
+									"});",
+									"",
+									"pm.test(\"Losts count baggages = 5\", function () {",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(Array.isArray(responseJson)).to.be.true;",
+									"    pm.expect(responseJson.length).to.eql(5);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/flight/lostBaggages?id=v-createCompany()-4-1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"flight",
+								"lostBaggages"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "v-createCompany()-4-1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

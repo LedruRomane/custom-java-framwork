@@ -1,5 +1,7 @@
 package tiw.is.vols.livraison.dao;
 
+import annotations.Component;
+import annotations.Data;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import tiw.is.vols.livraison.model.Baggage;
@@ -11,6 +13,7 @@ import java.util.Collection;
 /**
  * Data Access Object for Company Model.
  */
+@Data
 public class CompanyDao implements IDataAccessObject<Company> {
     private final EntityManager em;
 

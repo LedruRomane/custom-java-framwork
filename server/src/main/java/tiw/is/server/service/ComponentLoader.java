@@ -3,26 +3,21 @@ package tiw.is.server.service;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
+import jakarta.servlet.http.HttpServlet;
 import org.picocontainer.MutablePicoContainer;
 import tiw.is.server.commandBus.ICommand;
 import tiw.is.server.commandBus.ICommandHandler;
 import tiw.is.server.commandBus.IMiddleware;
+import tiw.is.server.framework.web.ServletSet;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ComponentLoader {
 
-    //todo: systeme de pass (pass Interface dans serveur).
-    // 1 implem conrete pass dédié pour charger les types de services
-    // 1 pour charger spécifiquement le handlerLocator.
-    // prends un tableau de pass
     private ComponentLoader() {}
 
     /**
@@ -30,15 +25,52 @@ public class ComponentLoader {
      * Register components in container.
      * Charge les composants déclarés dans le fichier de config en
      * fonction de leur forme dans le container de l'app.
-     * @param component Un jsonObject issu d'un array de appConfiguration.json
+     * @param component Un jsonObject issu d'un array de serverRootConfiguration.json
      * @param picoContainer gestionnaire.
      */
     public static void load(JsonObject component, MutablePicoContainer picoContainer) {
-        String className = component.getString("class-name");
-
         try {
+            if (component.containsKey("type") && component.get("type").toString().equals("\"handler-locator\"")) {
+                    // Instantiate the locator:
+                    Map<Class, ICommandHandler<Object, ICommand>> handlerLocator = new HashMap<>();
+                    JsonArray handlers =  component.getJsonArray("arguments");
+
+                    for (JsonValue handler : handlers) {
+                        String rawHandlerClass = handler.asJsonObject().getString("class-name");
+                        Class<ICommandHandler> handlerClass = (Class<ICommandHandler>) Class.forName(rawHandlerClass);
+                        // Register the handler as component in the container:
+                        picoContainer.addComponent(handlerClass);
+                        // Register the handler component in the locator:
+                        handlerLocator.put(getCommandFromHandler(handlerClass), picoContainer.getComponent(handlerClass));
+                    }
+                    picoContainer.addComponent(handlerLocator);
+
+                    return;
+                }
+
+                //servlet
+                if (component.containsKey("type") && component.get("type").toString().equals("\"servlet-set\"")) {
+                    picoContainer.addComponent(ServletSet.class);
+
+                    Set<Class<HttpServlet>> servletSet = new HashSet<>();
+                    JsonArray servlets =  component.getJsonArray("arguments");
+
+                    for (JsonValue servlet : servlets) {
+                        String rawServletClass = servlet.asJsonObject().getString("class-name");
+                        Class<HttpServlet> clazz = (Class<HttpServlet>) Class.forName(rawServletClass);
+                        picoContainer.addComponent(clazz);
+
+                        servletSet.add(clazz);
+                    }
+                    picoContainer.addComponent(servletSet);
+
+                    return;
+                }
+
+            String className = component.getString("class-name");
             Class<?> clazz = Class.forName(className);
 
+            // If any Persistence manager's factory
             if (component.containsKey("factory-type") && component.containsKey("factory-method")) {
 
                 Class<?> factoryClass = Class.forName(component.getString("factory-type"));
@@ -52,6 +84,7 @@ public class ComponentLoader {
                 return;
             }
 
+            // If any Persistence manager with params
             if (component.containsKey("params")) {
                 JsonArray params = component.getJsonArray("params");
                 Object[] constructorArgs = new Object[params.size()];
@@ -62,24 +95,6 @@ public class ComponentLoader {
                 }
 
                 picoContainer.addComponent(clazz, clazz.getConstructor(String.class, String.class, String.class, String.class).newInstance(constructorArgs));
-
-                return;
-            }
-
-            if (component.containsKey("type") && component.get("type").toString().equals("\"handler-locator\"")) {
-                // Instantiate the locator:
-                Map<Class, ICommandHandler<Object, ICommand>> handlerLocator = new HashMap<>();
-                JsonArray handlers =  component.getJsonArray("arguments");
-
-                for (JsonValue handler : handlers) {
-                    String rawHandlerClass = handler.asJsonObject().getString("class-name");
-                    Class<ICommandHandler> handlerClass = (Class<ICommandHandler>) Class.forName(rawHandlerClass);
-                    // Register the handler as component in the container:
-                    picoContainer.addComponent(handlerClass);
-                    // Register the handler component in the locator:
-                    handlerLocator.put(getCommandFromHandler(handlerClass), picoContainer.getComponent(handlerClass));
-                }
-                picoContainer.addComponent(handlerLocator);
 
                 return;
             }
@@ -134,6 +149,13 @@ public class ComponentLoader {
      * @return ParameterizedType of CommandHandler class.
      */
     static ParameterizedType getHandlerInterface(Class<?> myClass) {
+        if(myClass.getSuperclass() != null) {
+            ParameterizedType handlerInterface = getHandlerInterface(myClass.getSuperclass());
+            if (handlerInterface != null) {
+                return handlerInterface;
+            }
+        }
+
         Type[] interfaces =  myClass.getGenericInterfaces();
         for (Type type : interfaces) {
             if (type instanceof ParameterizedType && ((ParameterizedType) type).getRawType().getTypeName().equals(ICommandHandler.class.getTypeName())) {

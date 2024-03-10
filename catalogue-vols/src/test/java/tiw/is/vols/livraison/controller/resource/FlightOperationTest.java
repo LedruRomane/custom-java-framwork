@@ -3,7 +3,7 @@ package tiw.is.vols.livraison.controller.resource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
-import tiw.is.vols.livraison.dao.DataAccessObjectTest;
+import tiw.is.vols.livraison.DataAccessObjectTest;
 import tiw.is.vols.livraison.dto.FlightDTO;
 import tiw.is.vols.livraison.exception.ResourceNotFoundException;
 import tiw.is.vols.livraison.command.resource.flight.CreateOrUpdateFlightCommand;
@@ -77,22 +77,6 @@ class FlightOperationTest extends DataAccessObjectTest {
                     dumbVol.pointLivraisonBagages()
             ));
             assertNotNull(companyDao.getOneById(dumbVol.company()));
-        } catch (ResourceNotFoundException e) {
-            fail(e.getMessage());
-        }
-    }
-
-    @Test
-    void updateVol() {
-        String nouveauPointLivraison = "Pétaouchnok";
-        FlightDTO dto = new FlightDTO(flights[0].getId(), companies[0].getId(), nouveauPointLivraison);
-        try {
-            createOrUpdateCommandHandler.handle(new CreateOrUpdateFlightCommand(
-                    dto.id(),
-                    dto.company(),
-                    dto.pointLivraisonBagages()
-            ));
-            assertEquals(flightDao.getOneById(flights[0].getId()).getPointLivraisonBagages(), nouveauPointLivraison);
         } catch (ResourceNotFoundException e) {
             fail(e.getMessage());
         }

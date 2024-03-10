@@ -1,5 +1,8 @@
 package tiw.is.vols.livraison.handler.resource.flight;
 
+import annotations.Handler;
+import annotations.ServletFromHandler;
+import annotations.params.METHOD_REST;
 import tiw.is.vols.livraison.dao.FlightDao;
 import tiw.is.vols.livraison.dto.FlightDTO;
 import tiw.is.vols.livraison.exception.ResourceNotFoundException;
@@ -9,6 +12,12 @@ import tiw.is.vols.livraison.model.Flight;
 
 import java.util.Optional;
 
+@Handler
+@ServletFromHandler(
+        path = "flight",
+        method = METHOD_REST.GET,
+        params = {"id"}
+)
 public class GetFlightCommandHandler implements ICommandHandler<FlightDTO, GetFlightCommand> {
 
     private final FlightDao dao;

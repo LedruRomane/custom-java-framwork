@@ -1,0 +1,17 @@
+{
+  "application-config": {
+    "commandbus-components": [
+      {
+        "class-name": "tiw.is.server.commandBus.CommandBus",
+        "middleware-components": [
+          {
+            "class-name": "tiw.is.server.commandBus.TransactionMiddleware"
+          },
+          {
+            "class-name": "tiw.is.server.commandBus.HandlerMiddleware"
+          }
+        ]
+      }
+    ]
+  }
+}

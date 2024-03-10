@@ -2,7 +2,7 @@ package tiw.is.vols.livraison;
 
 import tiw.is.server.service.IDispatcher;
 import tiw.is.server.utils.JsonFormatter;
-import tiw.is.server.exception.CommandNotFoundException;
+import tiw.is.vols.livraison.exception.CommandNotFoundException;
 import tiw.is.vols.livraison.command.resource.baggage.CreateBaggageCommand;
 import tiw.is.vols.livraison.command.resource.baggage.DeleteBaggageCommand;
 import tiw.is.vols.livraison.command.resource.baggage.GetBaggageCommand;
@@ -25,6 +25,7 @@ import tiw.is.server.commandBus.ICommand;
 
 import java.util.Map;
 
+@annotations.Dispatcher
 public class Dispatcher implements IDispatcher {
     private static final JsonFormatter<Object> formatter = new JsonFormatter<>();
 

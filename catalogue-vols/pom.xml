@@ -24,12 +24,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>tiw.is</groupId>
-      <artifactId>server</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>1.4.14</version>
@@ -81,6 +75,12 @@
       <artifactId>jackson-databind</artifactId>
       <version>2.16.1</version>
     </dependency>
+    <dependency>
+      <groupId>tiw.is</groupId>
+      <artifactId>server</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -88,6 +88,47 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <mainClass>tiw.is.vols.livraison.Main</mainClass>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version>
+        <configuration>
+          <source>21</source>
+          <target>21</target>
+          <encoding>UTF-8</encoding>
+          <generatedSourcesDirectory>${project.build.directory}/generated-sources/</generatedSourcesDirectory>
+          <annotationProcessors>
+            <annotationProcessor>
+              annotations.processors.ServletProcessor
+            </annotationProcessor>
+            <annotationProcessor>
+              annotations.processors.BaseProcessor
+            </annotationProcessor>
+            <annotationProcessor>
+              annotations.processors.PersistenceProcessor
+            </annotationProcessor>
+            <annotationProcessor>
+              annotations.processors.DataProcessor
+            </annotationProcessor>
+            <annotationProcessor>
+              annotations.processors.HandlerProcessor
+            </annotationProcessor>
+            <annotationProcessor>
+              annotations.processors.DispatcherProcessor
+            </annotationProcessor>
+          </annotationProcessors>
+        </configuration>
       </plugin>
     </plugins>
   </build>

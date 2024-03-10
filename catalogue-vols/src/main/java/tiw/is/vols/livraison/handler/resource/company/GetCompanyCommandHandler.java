@@ -1,5 +1,8 @@
 package tiw.is.vols.livraison.handler.resource.company;
 
+import annotations.Handler;
+import annotations.ServletFromHandler;
+import annotations.params.METHOD_REST;
 import tiw.is.vols.livraison.dao.CompanyDao;
 import tiw.is.vols.livraison.exception.ResourceNotFoundException;
 import tiw.is.vols.livraison.command.resource.company.GetCompanyCommand;
@@ -8,6 +11,12 @@ import tiw.is.vols.livraison.model.Company;
 
 import java.util.Optional;
 
+@Handler
+@ServletFromHandler(
+        path = "company",
+        method = METHOD_REST.GET,
+        params = {"id"}
+)
 public class GetCompanyCommandHandler implements ICommandHandler<Company, GetCompanyCommand> {
     private final CompanyDao dao;
 

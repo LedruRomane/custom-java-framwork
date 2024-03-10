@@ -5,7 +5,7 @@ import tiw.is.server.commandBus.ICommand;
 /**
  * Command Record for Baggage creation.
  *
- * @param id String id of the new company that we want to create (payload).
+ * @param id Flight id where the baggage will be created.
  */
 public record CreateBaggageCommand(String id, String weight, String passenger) implements ICommand {
 }

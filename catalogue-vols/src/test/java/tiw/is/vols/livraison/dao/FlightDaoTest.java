@@ -1,6 +1,7 @@
 package tiw.is.vols.livraison.dao;
 
 import org.junit.jupiter.api.Test;
+import tiw.is.vols.livraison.DataAccessObjectTest;
 import tiw.is.vols.livraison.model.Company;
 import tiw.is.vols.livraison.model.Flight;
 
