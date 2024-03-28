@@ -36,10 +36,14 @@ public class DeliverBaggageCommandHandler implements ICommandHandler<BaggageDTO,
      * @return BaggageDTO
      * @throws ResourceNotFoundException
      */
-    public BaggageDTO handle(DeliverBaggageCommand command) throws ResourceNotFoundException {
+    public BaggageDTO handle(DeliverBaggageCommand command) throws ResourceNotFoundException, IllegalStateException {
         Flight flight = flightDao.getOneById(command.id());
         if (flight == null) {
             throw new ResourceNotFoundException("The flight doesn't exist: " + command.id());
+        }
+
+        if (!flight.isLivraisonEnCours()) {
+            throw new IllegalStateException("Impossible de livrer un bagage pour un vol dont la livraison est fermée.");
         }
 
         Baggage baggage = Optional.ofNullable(dao.getOneById(flight.getId(), command.num())).orElseThrow(

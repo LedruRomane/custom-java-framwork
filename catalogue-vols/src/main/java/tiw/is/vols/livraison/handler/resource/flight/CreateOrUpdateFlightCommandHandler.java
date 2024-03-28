@@ -46,7 +46,20 @@ public class CreateOrUpdateFlightCommandHandler implements ICommandHandler<Fligh
         Company company = Optional.ofNullable(companyDao.getOneById(dto.company())).orElseThrow(
                 () -> new ResourceNotFoundException("La compagnie " + dto.company() + " n'existe pas.")
         );
-        dao.save(new Flight(dto.id(), company, dto.pointLivraisonBagages()));
+
+        try {
+            Flight flightToModify = Optional.ofNullable(dao.getOneById(dto.id())).orElseThrow(
+                    () -> new ResourceNotFoundException("Le vol " + dto.id() + " n'existe pas.")
+            );
+            flightToModify.setCompany(company);
+            flightToModify.setPointLivraisonBagages(dto.pointLivraisonBagages());
+            dao.save(flightToModify);
+
+        } catch (ResourceNotFoundException e) {
+            // If the flight does not exist, we create it.
+            dao.save(new Flight(dto.id(), company, dto.pointLivraisonBagages()));
+            return dto;
+        }
 
         return dto;
     }
