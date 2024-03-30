@@ -11,7 +11,7 @@
 
 	<groupId>tiw.is</groupId>
 	<artifactId>moniteur</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
 	<name>moniteur</name>
 	<description>Moniteur de bagages</description>
 

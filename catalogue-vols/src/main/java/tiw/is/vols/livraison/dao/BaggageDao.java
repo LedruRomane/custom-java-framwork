@@ -32,6 +32,17 @@ public class BaggageDao implements IDataAccessObject<Baggage> {
     }
 
     /**
+     * Renvoie l'ensemble des bagages d'un vol.
+     *
+     * @return une collection de Bagages.
+     */
+    public Collection<Baggage> getAllFromFlight(String flightId) {
+        return em.createQuery("SELECT b FROM Baggage b WHERE b.flight.id = :vId", Baggage.class)
+                .setParameter("vId", flightId)
+                .getResultList();
+    }
+
+    /**
      * Créé un bagage pour le vol indiqué
      *
      * @param baggage Bagage à sauvegarder.

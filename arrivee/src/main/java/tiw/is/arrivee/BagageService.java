@@ -20,7 +20,7 @@ public class BagageService {
     }
 
     public void sendBagages(Vol vol) {
-        for (int i = 0; i < vol.nbBagages(); i++) {
+        /*for (int i = 0; i < vol.nbBagages(); i++) {
             Bagage bagage = vol.getBagage(i);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             try {
@@ -30,7 +30,7 @@ public class BagageService {
             }
             var data = baos.toByteArray();
             log.info("Sending message M1 for bagage {} ...", bagage);
-            /* TODO: section 1 & section 2 */
-        }
+            *//* TODO: section 1 & section 2 *//*
+        }*/
     }
 }
