@@ -43,7 +43,7 @@ public class DeliverBaggageCommandHandler implements ICommandHandler<BaggageDTO,
         }
 
         if (!flight.isLivraisonEnCours()) {
-            throw new IllegalStateException("Impossible de livrer un bagage pour un vol dont la livraison est fermée.");
+            throw new IllegalStateException("Impossible de livrer un bagage pour un vol " + flight.getId() + " dont la livraison est fermée.");
         }
 
         Baggage baggage = Optional.ofNullable(dao.getOneById(flight.getId(), command.num())).orElseThrow(

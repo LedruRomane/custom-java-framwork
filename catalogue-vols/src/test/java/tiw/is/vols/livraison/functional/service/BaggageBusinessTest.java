@@ -27,7 +27,7 @@ public class BaggageBusinessTest extends ServeurManager {
     void deliver() throws IOException {
         String command = "deliver";
         Map<String, Object> params = new HashMap<>();
-        params.put("id", "v-deliver()-0-0");
+        params.put("id", "v-deliver()-5-5");
         params.put("num", 1);
 
         JsonNode snapshot = mapper.readTree(new String(Files.readAllBytes(Paths.get(snapShotPath + "deliverTestSnapshot.json"))));

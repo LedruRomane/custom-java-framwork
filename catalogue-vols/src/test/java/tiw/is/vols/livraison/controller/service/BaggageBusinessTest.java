@@ -33,10 +33,10 @@ class BaggageBusinessTest extends DataAccessObjectTest {
     void delivrer() {
         try {
             deliverCommandHandler.handle(new DeliverBaggageCommand(
-                    BaggageDTO.fromBaggage(baggages[0]).flightId(),
-                    BaggageDTO.fromBaggage(baggages[0]).numero()
+                    BaggageDTO.fromBaggage(baggages[2]).flightId(),
+                    BaggageDTO.fromBaggage(baggages[2]).numero()
             ));
-            assertTrue(baggages[0].isDelivre());
+            assertTrue(baggages[2].isDelivre());
         } catch (ResourceNotFoundException e) {
             fail(e.getMessage());
         }

@@ -15,6 +15,9 @@
         <module>server</module>
         <module>catalogue-vols</module>
         <module>integration</module>
+        <module>tapis</module>
+        <module>arrivee</module>
+        <module>moniteur</module>
     </modules>
 
     <properties>
