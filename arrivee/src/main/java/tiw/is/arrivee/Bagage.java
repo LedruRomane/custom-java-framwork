@@ -1,4 +1,4 @@
 package tiw.is.arrivee;
 
-public record Bagage(String companie, String vol, int id) {
+public record Bagage(String flightId, int numero, int weight, String passenger) {
 }

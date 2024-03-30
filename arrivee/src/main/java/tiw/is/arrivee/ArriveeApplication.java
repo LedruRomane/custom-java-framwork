@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @EnableRabbit
 public class ArriveeApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(ArriveeApplication.class, args);
 	}

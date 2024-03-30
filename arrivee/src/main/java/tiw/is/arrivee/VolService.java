@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.Collection;
+
 @Service
 public class VolService {
     private static final Logger log = LoggerFactory.getLogger(VolService.class);
@@ -20,6 +22,16 @@ public class VolService {
                 .uri("/flight?id=" + volId)
                 .retrieve()
                 .bodyToMono(Vol.class)
+                .block();
+    }
+
+    public Collection<Bagage> getBaggages(String volId) {
+        log.info("GET /flight/bagages/{} on catalogue", volId);
+        return this.webClient.get()
+                .uri("/flight/baggages?id=" + volId)
+                .retrieve()
+                .bodyToFlux(Bagage.class)
+                .collectList()
                 .block();
     }
 }
