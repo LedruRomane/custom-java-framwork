@@ -42,7 +42,7 @@ public class SimulateurService {
                 Passage passage = new Passage(bagage, numero);
                 try {
                     String message = om.writeValueAsString(passage);
-                    log.info("Sending message M1 for passage: {}", message);
+                    log.info("Sending message M2 for passage: {}", message);
                     rabbitTemplate.convertAndSend("tiw.is.moniteur", message); // send M2
                 } catch (JsonProcessingException e) {
                     log.error("Failed to serialize passage: {}", passage);
