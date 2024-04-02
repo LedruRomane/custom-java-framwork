@@ -26,14 +26,27 @@ Ce document sert de registre détaillant les concepts clés explorés durant not
 make serve
 ```
 > 1. Lance le container postgresql.
-> 2. Load les fixtures via un dump de données de dev.
-> 3. Lance le serveur web, API disponible sur `http://localhost:8000`.
+> 2. Lance le container rabbitMQ sur `http://localhost:15672/` user `guest` password `guest`.
+> 3. Load les fixtures via un dump de données de dev.
+> 4. Lance le serveur web, API disponible sur `http://localhost:8000`.
 ### Lancer les tests
 
 ```bash
 make test
 ```
 > Lance les tests unitaires et fonctionnels.
+
+### Gérer la base de donnée
+    
+```bash
+make db.reset
+```
+> Note: cette commande relance les containers, il faudra donc relancer `make serve` si celui-ci était déjà lancé.
+
+```bash
+make db.fixtures
+```
+> Charge les fixtures via un dump de données de dev.
 
 Voir une collection POSTMAN pour les requêtes API :
 
