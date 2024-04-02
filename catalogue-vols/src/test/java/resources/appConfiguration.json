@@ -1,0 +1,169 @@
+{
+  "application-config": {
+    "servlets-components": [
+      {
+        "type": "servlet-set",
+        "arguments": [
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.company.GetCompaniesCommandHandler_Servlet_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.baggage.GetBaggagesCommandHandler_Servlet_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.flight.GetFlightCommandHandler_Servlet_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.service.flight.GetLostBaggagesCommandHandler_Servlet_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.baggage.GetBaggageCommandHandler_Servlet_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.service.flight.CloseShipmentCommandHandler_Servlet_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.company.CreateCompanyCommandHandler_Servlet_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.company.GetCompanyCommandHandler_Servlet_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.service.flight.GetUnclaimedBaggagesCommandHandler_Servlet_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.baggage.CreateBaggageCommandHandler_Servlet_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.baggage.DeleteBaggageCommandHandler_Servlet_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.service.baggage.DeliverBaggageCommandHandler_Servlet_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.company.DeleteCompanyCommandHandler_Servlet_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.service.baggage.RetrievalBaggageCommandHandler_Servlet_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.flight.GetFlightsCommandHandler_Servlet_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.flight.CreateOrUpdateFlightCommandHandler_Servlet_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.flight.DeleteFlightCommandHandler_Servlet_Component"
+          }
+        ]
+      }
+    ],
+    "persistence-components": [
+      {
+        "class-name": "tiw.is.vols.livraison.db.PersistenceManager_Persistence_Component",
+        "params": [
+          {
+            "name": "DB_HOST",
+            "value": "localhost"
+          },
+          {
+            "name": "DB_NAME",
+            "value": "catalogue-db"
+          },
+          {
+            "name": "DB_USER",
+            "value": "catalogue"
+          },
+          {
+            "name": "DB_PASSWORD",
+            "value": "catalogue-mdp"
+          }
+        ]
+      },
+      {
+        "class-name": "jakarta.persistence.EntityManagerFactory",
+        "factory-type": "tiw.is.vols.livraison.db.PersistenceManager_Persistence_Component",
+        "factory-method": "createEntityManagerFactory"
+      },
+      {
+        "class-name": "jakarta.persistence.EntityManager",
+        "factory-type": "jakarta.persistence.EntityManagerFactory",
+        "factory-method": "createEntityManager"
+      }
+    ],
+    "data-components": [
+      {
+        "class-name": "tiw.is.vols.livraison.dao.FlightDao_Data_Component"
+      },
+      {
+        "class-name": "tiw.is.vols.livraison.dao.CompanyDao_Data_Component"
+      },
+      {
+        "class-name": "tiw.is.vols.livraison.dao.BaggageDao_Data_Component"
+      }
+    ],
+    "handlers-components": [
+      {
+        "type": "handler-locator",
+        "arguments": [
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.company.GetCompaniesCommandHandler_Handler_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.baggage.GetBaggagesCommandHandler_Handler_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.flight.GetFlightCommandHandler_Handler_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.service.flight.GetLostBaggagesCommandHandler_Handler_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.baggage.GetBaggageCommandHandler_Handler_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.service.flight.CloseShipmentCommandHandler_Handler_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.company.CreateCompanyCommandHandler_Handler_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.company.GetCompanyCommandHandler_Handler_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.service.flight.GetUnclaimedBaggagesCommandHandler_Handler_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.baggage.CreateBaggageCommandHandler_Handler_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.baggage.DeleteBaggageCommandHandler_Handler_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.service.baggage.DeliverBaggageCommandHandler_Handler_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.company.DeleteCompanyCommandHandler_Handler_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.service.baggage.RetrievalBaggageCommandHandler_Handler_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.flight.GetFlightsCommandHandler_Handler_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.flight.CreateOrUpdateFlightCommandHandler_Handler_Component"
+          },
+          {
+            "class-name": "tiw.is.vols.livraison.handler.resource.flight.DeleteFlightCommandHandler_Handler_Component"
+          }
+        ]
+      }
+    ],
+    "dispatcher-components": [
+      {
+        "class-name": "tiw.is.vols.livraison.Dispatcher_Dispatcher_Component"
+      }
+    ]
+  }
+}

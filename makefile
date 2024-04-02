@@ -4,25 +4,33 @@ MVN = mvn
 
 .PHONY: default build clean compile test package run up
 
-build:
-	$(MVN) package
+up:
+	docker-compose up -d
+
+# Reset database
+db.reset:
+	docker-compose down && docker-compose up -d
+
+# Load dev fixtures
+db.fixtures: export PGPASSWORD=catalogue-mdp
+db.fixtures:
+	pg_restore --dbname="catalogue-db" --port=5432 --host="localhost" --username="catalogue" "./catalogue-vols/src/main/resources/fixtures.dump" --clean
 
 clean:
 	$(MVN) clean
 
+install:
+	$(MVN) clean install
+
 compile:
-	$(MVN) compile
+	$(MVN) clean compile
 
-test: clean compile
-	$(MVN) test
+verify:
+	$(MVN) clean verify
 
-# Package the project (without running tests)
-package:
-	$(MVN) package -Dmaven.test.skip=true
+test:
+	$(MVN) clean test
 
-# Run the project
-run:
-	$(MVN) exec:java -Dexec.mainClass="tiw.is.vols.catalogue.App"
-
-up:
-	docker-compose up -d
+# Serve
+serve: clean compile up
+	cd catalogue-vols && mvn exec:java
